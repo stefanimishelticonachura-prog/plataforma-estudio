@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MEDACADEMY Bolivia · El Futuro de la Salud está en tus Manos</title>
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="css/index.css" />
+</head>
+<body>
+
+    <!-- ===== NAVBAR ===== -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <img src="img/logo.png" alt="MEDACADEMY" class="logo-img" />
+                <span class="logo-text">MEDA<span>CADEMY</span></span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.php">Inicio</a></li>
+                <li><a href="#cursos">Cursos</a></li>
+                <li><a href="#testimonios">Testimonios</a></li>
+                <li><a href="#realidad">Realidad Boliviana</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li>
+                    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+                        <i class="fas fa-moon" id="themeIcon"></i>
+                        <span class="toggle-track">
+                            <span class="toggle-thumb"></span>
+                        </span>
+                    </button>
+                </li>
+                <li><a href="index.php" class="btn-login"><i class="fas fa-user"></i> Iniciar Sesión</a></li>
+                <li><a href="register.html" class="btn-register"><i class="fas fa-user-plus"></i> Registrarse</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ===== CARRUSEL INSPIRADOR ===== -->
+    <section class="inspirational-section">
+        <div class="container">
+            <h2 class="section-title">VIVE LA <span>EXPERIENCIA</span></h2>
+            <p class="section-subtitle">Sé parte de la generación de médicos que transformará el sistema de salud en Bolivia</p>
+
+            <div class="carousel-container">
+                <div class="carousel-slides">
+                    <!-- Slide 1 -->
+                    <div class="carousel-slide active">
+                        <div class="slide-image" style="background-image: url('img/medico1.jpg');">
+                            <div class="slide-content">
+                                <span class="slide-icon">🇧🇴</span>
+                                <h3>SOBERANÍA SANITARIA</h3>
+                                <p>Bolivia necesita médicos preparados para liderar su propio sistema de salud</p>
+                                <span class="slide-tag">Plan Nacional 2026-2030</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 2 -->
+                    <div class="carousel-slide">
+                        <div class="slide-image" style="background-image: url('img/medico2.jpg');">
+                            <div class="slide-content">
+                                <span class="slide-icon">🧬</span>
+                                <h3>MEDICINA DE PRECISIÓN</h3>
+                                <p>El futuro de la salud en Bolivia pasa por la genética y la tecnología</p>
+                                <span class="slide-tag">V Congreso Unifranz 2026</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 3 -->
+                    <div class="carousel-slide">
+                        <div class="slide-image" style="background-image: url('img/medico3.jpg');">
+                            <div class="slide-content">
+                                <span class="slide-icon">💪</span>
+                                <h3>IMPACTAS VIDAS</h3>
+                                <p>Tu conocimiento y tu humanidad pueden marcar la diferencia cada día</p>
+                                <ul class="features-grid-slide">
+                                    <li>Aprendes sin límites</li>
+                                    <li>Trabajas en equipo</li>
+                                    <li>Oportunidades globales</li>
+                                    <li>Realizas tu propósito</li>
+                                </ul>
+                                <span class="slide-tag">Más que una carrera, un propósito</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 4 -->
+                    <div class="carousel-slide">
+                        <div class="slide-image" style="background-image: url('img/medico4.jpg');">
+                            <div class="slide-content">
+                                <span class="slide-icon">🏥</span>
+                                <h3>DEMANDA CRECIENTE</h3>
+                                <p>Bolivia tiene 14 médicos por cada 10.000 hab. ¡Se necesitan más!</p>
+                                <span class="slide-tag">OMS recomienda 25</span>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Slide 5 -->
+                    <div class="carousel-slide">
+                        <div class="slide-image" style="background-image: url('img/medico1.jpg');">
+                            <div class="slide-content">
+                                <span class="slide-icon">🚀</span>
+                                <h3>OPORTUNIDAD ÚNICA</h3>
+                                <p>El sistema de salud boliviano se está transformando. Tú puedes ser parte del cambio.</p>
+                                <div class="final-message">LA MEDICINA TE RETA, <span>TE TRANSFORMA</span> Y TE CONVIERTE EN LA MEJOR VERSIÓN DE TI.</div>
+                                <span class="slide-tag">Nueva Ley de Salud 2026</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="carousel-btn prev-btn" aria-label="Anterior">
+                    <i class="fas fa-chevron-left"></i>
+                </button>
+                <button class="carousel-btn next-btn" aria-label="Siguiente">
+                    <i class="fas fa-chevron-right"></i>
+                </button>
+
+                <div class="carousel-indicators">
+                    <span class="indicator active" data-slide="0"></span>
+                    <span class="indicator" data-slide="1"></span>
+                    <span class="indicator" data-slide="2"></span>
+                    <span class="indicator" data-slide="3"></span>
+                    <span class="indicator" data-slide="4"></span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== HERO ===== -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-badge"><i class="fas fa-stethoscope"></i> Bolivia te necesita</div>
+            <h1>PREPÁRATE PARA SER EL <span>MÉDICO QUE BOLIVIA NECESITA</span></h1>
+            <p>La medicina te reta, te transforma y te convierte en la mejor versión de ti. Somos la academia que te prepara para los desafíos reales del sistema de salud boliviano.</p>
+            <div class="hero-stats-mini">
+                <span><i class="fas fa-check-circle"></i> 92% de aprobados en ENAM 2025</span>
+                <span><i class="fas fa-trophy"></i> 34 primeros puestos en residentado</span>
+                <span><i class="fas fa-users"></i> +200 médicos formados para Bolivia</span>
+            </div>
+            <a href="register.html" class="btn-primary"><i class="fas fa-rocket"></i> Comienza tu preparación ahora</a>
+        </div>
+    </section>
+
+    <!-- ===== ESTADÍSTICAS ===== -->
+    <section class="stats-section">
+        <div class="container">
+            <h2 class="section-title">La realidad de la salud en Bolivia</h2>
+            <p class="section-subtitle">Datos que muestran por qué tu formación es clave para el futuro del país</p>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="number">14</div>
+                    <div class="label">Médicos x 10.000 hab.</div>
+                    <div class="stat-desc">Bolivia está por debajo de los 25 recomendados por la OMS</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">73%</div>
+                    <div class="label">Muertes por enfermedades crónicas</div>
+                    <div class="stat-desc">Diabetes, hipertensión y cáncer son la principal causa de muerte</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">46%</div>
+                    <div class="label">Ocupación de hospitales de 2do nivel</div>
+                    <div class="stat-desc">Falta de resolutividad en centros de salud intermedios</div>
+                </div>
+                <div class="stat-item">
+                    <div class="number">30%</div>
+                    <div class="label">Gasto de bolsillo en salud</div>
+                    <div class="stat-desc">Las familias bolivianas pagan gran parte de su tratamiento</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== POR QUÉ ESTUDIAR MEDICINA ===== -->
+    <section class="section" style="background: var(--bg-main);">
+        <div class="container">
+            <h2 class="section-title">¿Por qué <span>estudiar Medicina</span>?</h2>
+            <p class="section-subtitle">Cinco razones que te llevan a elegir este camino</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="icon">❤️</span>
+                    <h3>PASIÓN</h3>
+                    <p>La medicina nace del deseo de ayudar y aliviar el sufrimiento humano.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">⚡</span>
+                    <h3>DESAFÍO</h3>
+                    <p>Cada caso clínico es un reto que pone a prueba tu conocimiento y creatividad.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">📚</span>
+                    <h3>CONOCIMIENTO</h3>
+                    <p>La medicina es un camino constante de aprendizaje y crecimiento intelectual.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">🤝</span>
+                    <h3>EMPATÍA</h3>
+                    <p>La capacidad de entender al otro es tan importante como el conocimiento técnico.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">🎯</span>
+                    <h3>PROPÓSITO</h3>
+                    <p>No hay mayor satisfacción que ayudar a otros y dejar una huella en el mundo.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== POR QUÉ MEDACADEMY ===== -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">¿Por qué <span>MEDACADEMY</span>?</h2>
+            <p class="section-subtitle">Te preparamos para los exámenes de admisión a las mejores universidades de Bolivia y para el futuro de la medicina en el país.</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="icon">🎯</span>
+                    <h3>100% Enfoque en Bolivia</h3>
+                    <p>Nuestro currículo está alineado con el Plan Nacional de Salud y las necesidades del sistema boliviano.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">🧠</span>
+                    <h3>Metodología de Vanguardia</h3>
+                    <p>Basada en neurociencia y adaptada a los nuevos enfoques como la medicina de precisión.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">🛠️</span>
+                    <h3>Simuladores y Prácticas</h3>
+                    <p>Preparación para el Examen de Competencia de la Residencia Médica (SNRM) y el ENAM con casos reales.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="icon">📈</span>
+                    <h3>Convenios con Hospitales</h3>
+                    <p>Prácticas garantizadas en hospitales de segundo y tercer nivel en todo Bolivia.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CURSOS ===== -->
+    <section id="cursos" class="section" style="background: var(--primary-light);">
+        <div class="container">
+            <h2 class="section-title">Nuestros <span>Cursos 2026</span></h2>
+            <p class="section-subtitle">Preparación para las principales universidades y el Sistema Nacional de Residencia Médica de Bolivia.</p>
+            <div class="features-grid">
+                <div class="feature-card course-card">
+                    <div class="course-tag">Curso Básico UMSS</div>
+                    <h3>📚 Admisión Medicina 2026</h3>
+                    <p>Prepárate para el Curso Básico de la UMSS (Cochabamba) y las principales universidades del país.</p>
+                    <ul class="course-details">
+                        <li><i class="fas fa-clock"></i> Inicio: 01 de diciembre 2025</li>
+                        <li><i class="fas fa-book"></i> Biología, Química, Física, Matemáticas</li>
+                        <li><i class="fas fa-users"></i> Grupos reducidos</li>
+                    </ul>
+                    <a href="#" class="btn-course">Ver más <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="feature-card course-card">
+                    <div class="course-tag">Examen SNRM</div>
+                    <h3>🏥 Residencia Médica 2026</h3>
+                    <p>Preparación intensiva para el Examen de Competencia del Sistema Nacional de Residencia Médica.</p>
+                    <ul class="course-details">
+                        <li><i class="fas fa-calendar-alt"></i> Examen: Marzo 2026</li>
+                        <li><i class="fas fa-user-md"></i> Especialidades y Subespecialidades</li>
+                        <li><i class="fas fa-video"></i> Simulacros de examen presencial</li>
+                    </ul>
+                    <a href="#" class="btn-course">Ver más <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="feature-card course-card">
+                    <div class="course-tag">Nuevo</div>
+                    <h3>🩺 SERUMS ENCAPS 2026-II</h3>
+                    <p>Formación en salud pública y comunitaria, con enfoque en las zonas rurales de Bolivia.</p>
+                    <ul class="course-details">
+                        <li><i class="fas fa-clock"></i> 180 horas teórico-prácticas</li>
+                        <li><i class="fas fa-hospital"></i> Rotaciones en centros de salud</li>
+                        <li><i class="fas fa-certificate"></i> Certificación oficial</li>
+                    </ul>
+                    <a href="#" class="btn-course">Ver más <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== TESTIMONIOS ===== -->
+    <section id="testimonios" class="section">
+        <div class="container">
+            <h2 class="section-title">Historias de <span>éxito boliviano</span></h2>
+            <p class="section-subtitle">Médicos que están transformando la salud en Bolivia gracias a su preparación.</p>
+            <div class="features-grid">
+                <div class="feature-card testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p style="font-style: italic;">"Gracias a la preparación en MEDACADEMY logré el primer puesto en el examen de residencia médica. Ahora estoy aplicando la medicina de precisión en mi especialidad."</p>
+                    <div class="testimonial-author">
+                        <h4>— Dra. Carla P.</h4>
+                        <small>🥇 1er puesto - SNRM 2025</small>
+                        <span class="badge">Especialidad: Cardiología (Cochabamba)</span>
+                    </div>
+                </div>
+                <div class="feature-card testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p style="font-style: italic;">"El enfoque en la realidad boliviana me ayudó a entender los desafíos del sistema de salud. Ahora trabajo en un hospital de segundo nivel en Santa Cruz."</p>
+                    <div class="testimonial-author">
+                        <h4>— Dr. Andrés M.</h4>
+                        <small>🥇 1er puesto - ENAM 2024</small>
+                        <span class="badge">Especialidad: Medicina Interna</span>
+                    </div>
+                </div>
+                <div class="feature-card testimonial-card">
+                    <div class="testimonial-stars">★★★★★</div>
+                    <p style="font-style: italic;">"Las prácticas en hospitales me prepararon para la realidad. Hoy soy parte del equipo que está implementando la telemedicina en el Plan Nacional de Salud."</p>
+                    <div class="testimonial-author">
+                        <h4>— Dra. Valeria R.</h4>
+                        <small>Especialista en Salud Pública</small>
+                        <span class="badge">Ministerio de Salud de Bolivia</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== REALIDAD BOLIVIANA ===== -->
+    <section id="realidad" class="section" style="background: var(--bg-main);">
+        <div class="container">
+            <h2 class="section-title">El contexto que <span>necesitas conocer</span></h2>
+            <p class="section-subtitle">Datos clave sobre el sistema de salud en Bolivia y por qué tu preparación es urgente.</p>
+            <div class="features-grid">
+                <div class="feature-card" style="border-left: 4px solid var(--primary);">
+                    <h3>⚕️ Déficit de profesionales</h3>
+                    <p>Bolivia necesita formar más médicos para alcanzar los estándares de la OMS. Las universidades están ampliando su oferta en ciudades como Tarija, Oruro y La Paz.</p>
+                </div>
+                <div class="feature-card" style="border-left: 4px solid #F6B83D;">
+                    <h3>📊 Enfermedades crónicas en aumento</h3>
+                    <p>El 73% de las muertes en Bolivia son por diabetes, hipertensión y cáncer. Se necesitan especialistas en estas áreas para enfrentar la epidemia.</p>
+                </div>
+                <div class="feature-card" style="border-left: 4px solid #4A90D9;">
+                    <h3>💻 Transformación digital</h3>
+                    <p>El Plan Nacional de Salud 2026-2030 apuesta por la historia clínica electrónica y la telemedicina. Los futuros médicos deben estar preparados en estas herramientas.</p>
+                </div>
+                <div class="feature-card" style="border-left: 4px solid #EF4444;">
+                    <h3>💊 Crisis de medicamentos</h3>
+                    <p>El alza de precios y la escasez de medicamentos afecta a miles de pacientes. Se necesitan médicos comprometidos con la salud pública y la gestión de recursos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== FAQ ===== -->
+    <section id="faq" class="section">
+        <div class="container">
+            <h2 class="section-title">Preguntas <span>Frecuentes</span></h2>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <h4><i class="fas fa-question-circle"></i> ¿Qué universidades de Bolivia preparan para Medicina?</h4>
+                    <p>Preparamos para la UMSS (Cochabamba), UAGRM (Santa Cruz), UCB (Santa Cruz), UPAL (Oruro), UPDS (Tarija), UNANDES (La Paz) y Unifranz (El Alto).</p>
+                </div>
+                <div class="faq-item">
+                    <h4><i class="fas fa-question-circle"></i> ¿Cuándo son los exámenes de admisión?</h4>
+                    <p>Depende de la universidad. Por ejemplo, el curso propedéutico de la UCB inicia en julio de 2026, mientras que el Curso Básico de la UMSS comienza en diciembre de 2025.</p>
+                </div>
+                <div class="faq-item">
+                    <h4><i class="fas fa-question-circle"></i> ¿Qué es el SNRM?</h4>
+                    <p>Es el Sistema Nacional de Residencia Médica en Bolivia. El examen de competencia se realiza en marzo de 2026 en todo el país.</p>
+                </div>
+                <div class="faq-item">
+                    <h4><i class="fas fa-question-circle"></i> ¿Incluye prácticas en hospitales?</h4>
+                    <p>Sí, gracias a nuestros convenios con hospitales de segundo y tercer nivel en Oruro, Cochabamba, Sucre, Potosí y Tarija.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== CTA FINAL ===== -->
+    <section class="cta-final">
+        <div class="container">
+            <h2>¿Listo para <span>transformar la salud en Bolivia</span>?</h2>
+            <p>El país te necesita. Prepárate con nosotros y sé parte de la generación de médicos que marcará la diferencia.</p>
+            <a href="register.html" class="btn-large"><i class="fas fa-graduation-cap"></i> Inscríbete ahora</a>
+            <p class="cta-small">* Cupos limitados por grupo. Asegura tu vacante hoy.</p>
+        </div>
+    </section>
+
+    <!-- ===== FOOTER ===== -->
+    <footer class="footer">
+        <div class="container">
+            <div class="logo" style="justify-content: center;">
+                <img src="img/logo.png" alt="MEDACADEMY" class="logo-img" />
+                <span class="logo-text">MEDA<span>CADEMY</span></span>
+            </div>
+            <p>Formamos a los médicos que Bolivia necesita.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-youtube"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+            </div>
+            <div class="footer-contact">
+                
+                <span><i class="fas fa-phone"></i> +591 65322203</span>
+                <span><i class="fas fa-envelope"></i> info@medacademy.bo</span>
+                <span><i class="fas fa-map-marker-alt"></i> Av. Principal 123, La Paz</span>
+            </div>
+            <p>&copy; 2026 MEDACADEMY Bolivia. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- ===== SCRIPTS ===== -->
+    <script>
+        // ===== CARRUSEL =====
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.carousel-slide');
+            const indicators = document.querySelectorAll('.indicator');
+            const prevBtn = document.querySelector('.prev-btn');
+            const nextBtn = document.querySelector('.next-btn');
+            let currentSlide = 0;
+            let slideInterval;
+
+            function goToSlide(index) {
+                slides.forEach((slide, i) => {
+                    slide.classList.toggle('active', i === index);
+                });
+                indicators.forEach((indicator, i) => {
+                    indicator.classList.toggle('active', i === index);
+                });
+                currentSlide = index;
+            }
+
+            function nextSlide() {
+                goToSlide((currentSlide + 1) % slides.length);
+            }
+
+            function prevSlide() {
+                goToSlide((currentSlide - 1 + slides.length) % slides.length);
+            }
+
+            function startAutoSlide() {
+                slideInterval = setInterval(nextSlide, 5000);
+            }
+
+            function resetAutoSlide() {
+                clearInterval(slideInterval);
+                startAutoSlide();
+            }
+
+            nextBtn.addEventListener('click', () => {
+                nextSlide();
+                resetAutoSlide();
+            });
+
+            prevBtn.addEventListener('click', () => {
+                prevSlide();
+                resetAutoSlide();
+            });
+
+            indicators.forEach((indicator, index) => {
+                indicator.addEventListener('click', () => {
+                    goToSlide(index);
+                    resetAutoSlide();
+                });
+            });
+
+            // Touch support
+            let touchStartX = 0;
+            let touchEndX = 0;
+            const carousel = document.querySelector('.carousel-container');
+
+            carousel.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            carousel.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                const diff = touchStartX - touchEndX;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0) {
+                        nextSlide();
+                    } else {
+                        prevSlide();
+                    }
+                    resetAutoSlide();
+                }
+            }, { passive: true });
+
+            startAutoSlide();
+        });
+
+        // ===== THEME TOGGLE =====
+        document.addEventListener('DOMContentLoaded', function() {
+            const themeToggle = document.getElementById('themeToggle');
+            const themeIcon = document.getElementById('themeIcon');
+            const html = document.documentElement;
+            
+            const savedTheme = localStorage.getItem('theme');
+            if (savedTheme === 'dark') {
+                html.setAttribute('data-theme', 'dark');
+                themeIcon.classList.remove('fa-moon');
+                themeIcon.classList.add('fa-sun');
+            }
+
+            themeToggle.addEventListener('click', function() {
+                const isDark = html.getAttribute('data-theme') === 'dark';
+                
+                if (isDark) {
+                    html.removeAttribute('data-theme');
+                    localStorage.setItem('theme', 'light');
+                    themeIcon.classList.remove('fa-sun');
+                    themeIcon.classList.add('fa-moon');
+                } else {
+                    html.setAttribute('data-theme', 'dark');
+                    localStorage.setItem('theme', 'dark');
+                    themeIcon.classList.remove('fa-moon');
+                    themeIcon.classList.add('fa-sun');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
