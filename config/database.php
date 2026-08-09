@@ -16,7 +16,7 @@ if (getenv('ENVIRONMENT') === 'production') {
     $host     = getenv('DB_HOST')     ?: 'mysql-1a3a2fae-stefanimishelticonachura-ebb8.a.aivencloud.com';
     $dbname   = getenv('DB_NAME')     ?: 'plataforma_estudio';
     $username = getenv('DB_USER')     ?: 'avnadmin';
-    $password = getenv('DB_PASSWORD') ?: 'AVNS_SM4u1fVUK9uu_xhnKUn';
+    $password = getenv('DB_PASSWORD') ?: 'AVNS_SM4ulfvUK9uu_xhnKUn';
     $port     = getenv('DB_PORT')     ?: '18631';
 }
 
