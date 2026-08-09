@@ -1,6 +1,6 @@
 <?php
 // ============================================================
-// CONEXIÓN A LA BASE DE DATOS (VERSIÓN ROBUSTA PARA RENDER + AIVEN)
+// CONEXIÓN A LA BASE DE DATOS (VERSIÓN FINAL PRODUCCIÓN)
 // Archivo: config/database.php
 // ============================================================
 
@@ -40,19 +40,15 @@ try {
     // Intentar la conexión
     $pdo = new PDO($dsn, $username, $password, $options);
     
-    // Si llegamos hasta aquí, la conexión fue EXITOSA (Para pruebas)
-    if (getenv('ENVIRONMENT') === 'production') {
-        echo "<h1 style='color:green; text-align:center; margin-top:50px;'>✅ CONEXIÓN A LA BASE DE DATOS EXITOSA</h1>";
-        echo "<p style='text-align:center;'>La página debería cargar ahora. Si ves esto, el problema de conexión está solucionado.</p>";
-        exit(); // Detenemos la ejecución para que veas el mensaje de éxito.
-    }
-    
 } catch(PDOException $e) {
-    // FORZAR A VER EL ERROR EN LA PÁGINA WEB
+    // En producción, mostrar un mensaje amigable al usuario
     if (getenv('ENVIRONMENT') === 'production') {
-        die("<h2 style='color:red;'>ERROR REAL DE CONEXIÓN:</h2><pre style='background:#f4f4f4; padding:15px; border:1px solid #ddd;'>" . $e->getMessage() . "</pre>");
+        // Si quieres ver el error real en producción, descomenta la línea de abajo y comenta el die()
+        // die("Error real: " . $e->getMessage());
+        die("Error de conexión a la base de datos. Por favor, intente más tarde.");
     } else {
-        die("Error de conexión local: " . $e->getMessage());
+        // En desarrollo, mostrar error detallado
+        die("Error de conexión: " . $e->getMessage());
     }
 }
 
