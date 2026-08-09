@@ -31,9 +31,10 @@ try {
         PDO::ATTR_EMULATE_PREPARES => false,
     ];
     
-    // En producción (Aiven), habilitar SSL
+    // En producción (Aiven), habilitar SSL correctamente
     if (getenv('ENVIRONMENT') === 'production') {
-        $options[PDO::MYSQL_ATTR_SSL_CA] = true;
+        // Esta es la ruta universal del certificado dentro del contenedor de Render
+        $options[PDO::MYSQL_ATTR_SSL_CA] = '/etc/ssl/certs/ca-certificates.crt';
         $options[PDO::MYSQL_ATTR_SSL_VERIFY_SERVER_CERT] = false;
     }
     
@@ -42,6 +43,8 @@ try {
 } catch(PDOException $e) {
     // En producción, mostrar error genérico (seguridad)
     if (getenv('ENVIRONMENT') === 'production') {
+        // Si quieres ver el error real para depurar, descomenta la línea de abajo y comenta el die()
+        // die("Error real: " . $e->getMessage()); 
         die("Error de conexión a la base de datos. Por favor, intente más tarde.");
     } else {
         // En desarrollo, mostrar error detallado
