@@ -8,16 +8,26 @@ $email_origen = "medacademy2000@gmail.com";
 $clave_app = "eepv tcoz pydf llcd";
 $url_login = "https://plataforma-estudio-9eot.onrender.com/";
 
+// ========== DETECTAR ENTORNO ==========
+$is_production = (getenv('ENVIRONMENT') === 'production' || getenv('RENDER'));
+
 // ========== CARGAR PHPMailer ==========
-require_once 'PHPMailer/src/PHPMailer.php';
-require_once 'PHPMailer/src/SMTP.php';
-require_once 'PHPMailer/src/Exception.php';
-require_once '../../config/database.php';
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch(PDOException $e) {
-    die("❌ Error de conexión: " . $e->getMessage());
+require_once __DIR__ . '/../PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . '/../PHPMailer/src/SMTP.php';
+require_once __DIR__ . '/../PHPMailer/src/Exception.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\SMTP;
+use PHPMailer\PHPMailer\Exception;
+
+// ========== CONEXIÓN A LA BASE DE DATOS (USANDO TU ARCHIVO) ==========
+// IMPORTANTE: Ajusta esta ruta según donde esté tu database.php
+// Si está en config/database.php y este archivo está en views/
+require_once __DIR__ . '/../config/database.php';
+
+// Verificar que la conexión $pdo existe
+if (!isset($pdo)) {
+    die('❌ Error: No se pudo establecer conexión a la base de datos');
 }
 
 // ========== PROCESAR EL FORMULARIO ==========
@@ -63,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Enviar correo con PHPMailer
                 $nombre_completo = $usuario['nombre'] . ' ' . $usuario['apellido'];
                 
-                $mail = new PHPMailer\PHPMailer\PHPMailer(true);
+                $mail = new PHPMailer(true);
                 
                 try {
                     // Configuración SMTP
@@ -73,8 +83,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $mail->SMTPAuth = true;
                     $mail->Username = $email_origen;
                     $mail->Password = str_replace(' ', '', $clave_app);
-                    $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
-                    $mail->Port = 587;
+                    
+                    // En producción usar SSL, en local STARTTLS
+                    if ($is_production) {
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                        $mail->Port = 465;
+                    } else {
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                        $mail->Port = 587;
+                    }
                     
                     $mail->setFrom($email_origen, 'MEDACADEMY');
                     $mail->addAddress($correo_usuario, $nombre_completo);
@@ -603,6 +620,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border: 1px solid var(--border-color);
             font-family: 'Courier New', monospace;
             transition: all var(--transition);
+            cursor: pointer;
         }
 
         .email-hint .emails span:hover {
@@ -1026,13 +1044,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
 
+                <!-- Lista de correos de prueba -->
+                <div class="email-hint">
+                    <p>📋 Correos registrados para probar:</p>
+                    <div class="emails">
+                        <span>medel@gmail.com</span>
+                        <span>mishel@gmail.com</span>
+                        <span>laura@gmail.com</span>
+                        <span>cristal@gmail.com</span>
+                        <span>yo@gmail.com</span>
+                    </div>
+                </div>
+
                 <button type="submit" class="btn-recover" id="submitBtn" <?php echo $tipo_mensaje === 'exito' ? 'disabled' : ''; ?>>
                     <i class="fas fa-paper-plane"></i>
                     <?php echo $tipo_mensaje === 'exito' ? '¡Enviado con éxito!' : 'Enviar nueva contraseña'; ?>
                 </button>
             </form>
-
-
 
             <div class="login-link">
                 ¿Recordaste tu contraseña? <a href="<?php echo htmlspecialchars($url_login); ?>">Inicia sesión aquí</a>
@@ -1130,7 +1158,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             const submitBtn = document.getElementById('submitBtn');
             let isSubmitting = false;
 
-            form.addEventListener('submit', function() {
+            form.addEventListener('submit', function(e) {
                 if (isSubmitting) {
                     e.preventDefault();
                     return;
