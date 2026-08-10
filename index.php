@@ -267,7 +267,6 @@ if (isset($_COOKIE['remember_correo'])) {
                         <input type="checkbox" name="remember" id="remember" <?php echo $remember_checked ? 'checked' : ''; ?>>
                         Recordarme
                     </label>
-                    <a href="recuperacion.php"><i class="fas fa-question-circle"></i> ¿Olvidaste tu contraseña?</a>
                 </div>
 
                 <button type="submit" class="btn-login">
