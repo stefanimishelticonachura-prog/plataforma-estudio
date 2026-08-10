@@ -6,16 +6,163 @@ if (isset($_SESSION['usuario_id'])) {
     header('Location: dashboard.php');
     exit();
 }
+
+// Procesar "Recordarme" - cookie de correo
+if (isset($_COOKIE['remember_correo'])) {
+    $correo_recordado = $_COOKIE['remember_correo'];
+    $remember_checked = true;
+} else {
+    $correo_recordado = '';
+    $remember_checked = false;
+}
 ?>
 <!DOCTYPE html>
 <html lang="es" data-theme="light">
-<link rel="stylesheet" href="css/index_login.css">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>MEDACADEMY - Iniciar Sesión</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/index_login.css">
+    
+    <style>
+        /* Estilos para los botones de navegación */
+        .navigation-buttons {
+            margin-top: 25px;
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            border-top: 1px solid var(--border-color, #e5e7eb);
+            padding-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-register {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: #207a8a;
+            color: white !important;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            flex: 1;
+            justify-content: center;
+            min-width: 140px;
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.25);
+            cursor: pointer;
+        }
+
+        .btn-register:hover {
+            background: #207a8a;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+            color: white !important;
+        }
+
+        .btn-register:active {
+            transform: translateY(0);
+        }
+
+        .btn-back-home {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 28px;
+            background: #f3f4f6;
+            color: #1f2937 !important;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+            flex: 1;
+            justify-content: center;
+            min-width: 140px;
+            cursor: pointer;
+        }
+
+        .btn-back-home:hover {
+            background: #e5e7eb;
+            border-color: #4b5563;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-back-home i,
+        .btn-register i {
+            font-size: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .btn-register:hover i {
+            transform: translateX(3px);
+        }
+
+        .btn-back-home:hover i {
+            transform: translateX(-3px);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .navigation-buttons {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .btn-register,
+            .btn-back-home {
+                flex: none;
+                width: 100%;
+            }
+        }
+
+        /* Modo oscuro */
+        [data-theme="dark"] .btn-back-home {
+            background: #374151;
+            color: #f9fafb !important;
+            border-color: #4b5563;
+        }
+
+        [data-theme="dark"] .btn-back-home:hover {
+            background: #4b5563;
+            border-color: #9ca3af;
+        }
+
+        [data-theme="dark"] .btn-register {
+            box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+        }
+
+        /* Estilos adicionales para mejorar la apariencia */
+        .btn-register, .btn-back-home {
+            letter-spacing: 0.3px;
+        }
+
+        .btn-register i, .btn-back-home i {
+            font-size: 1.1rem;
+        }
+
+        /* Animación sutil al cargar */
+        .navigation-buttons {
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 <body>
     
@@ -59,12 +206,10 @@ if (isset($_SESSION['usuario_id'])) {
             <!-- Form Header -->
             <div class="form-header">
                 <div class="brand-small">
-
                     <i class="fas fa-graduation-cap"></i>
                     MEDACADEMY
                 </div>
                 <h2>Iniciar Sesión</h2>
-                
                 <p>Ingresa tus credenciales para acceder a tu cuenta</p>
             </div>
 
@@ -98,7 +243,8 @@ if (isset($_SESSION['usuario_id'])) {
                     <div class="input-wrapper">
                         <span class="input-icon"><i class="fas fa-user"></i></span>
                         <input type="email" id="correo" name="correo" required 
-                               placeholder="ejemplo@email.com" autocomplete="email">
+                               placeholder="ejemplo@email.com" autocomplete="email"
+                               value="<?php echo htmlspecialchars($correo_recordado); ?>">
                     </div>
                 </div>
                 
@@ -118,7 +264,7 @@ if (isset($_SESSION['usuario_id'])) {
 
                 <div class="form-options">
                     <label>
-                        <input type="checkbox" name="remember" id="remember">
+                        <input type="checkbox" name="remember" id="remember" <?php echo $remember_checked ? 'checked' : ''; ?>>
                         Recordarme
                     </label>
                     <a href="#"><i class="fas fa-question-circle"></i> ¿Olvidaste tu contraseña?</a>
@@ -129,28 +275,19 @@ if (isset($_SESSION['usuario_id'])) {
                     Iniciar Sesión
                 </button>
             </form>
-            <!-- Credenciales de prueba -->
-            <div class="test-credentials">
-                <h4><i class="fas fa-flask"></i> Credenciales de prueba</h4>
-                <div class="cred-grid">
-                    <div class="cred-item">
-                        <span class="role-badge">👨‍🎓 Estudiante</span>
-                        <span>juan.perez@email.com</span>
-                        <span class="cred-pass">· password</span>
-                    </div>
-                    <div class="cred-item">
-                        <span class="role-badge">👨‍🏫 Profesor</span>
-                        <span>carlos.mendoza@email.com</span>
-                        <span class="cred-pass">· password</span>
-                    </div>
-                    <div class="cred-item" style="grid-column: span 2;">
-                        <span class="role-badge">👑 Administrador</span>
-                        <span>admin@plataforma.com</span>
-                        <span class="cred-pass">· password</span>
-                    </div>
-                        <i><a href="index.html">volver al inicio</a></i>
-                </div>
+
+            <!-- Botones de navegación -->
+            <div class="navigation-buttons">
+                <a href="registrar.php" class="btn-register">
+                    <i class="fas fa-user-plus"></i>
+                    <span>Crear cuenta</span>
+                </a>
+                <a href="index.html" class="btn-back-home">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Volver al inicio</span>
+                </a>
             </div>
+
         </div>
     </div>
 
@@ -233,26 +370,6 @@ if (isset($_SESSION['usuario_id'])) {
                     alert('Por favor, ingresa un correo electrónico válido.');
                     document.getElementById('correo').focus();
                     return;
-                }
-            });
-
-            // ---------- AUTOCOMPLETADO SEGURO ----------
-            // Si hay error, mantener el correo escrito
-            const urlParams = new URLSearchParams(window.location.search);
-            const errorParam = urlParams.get('error');
-            if (errorParam) {
-                const correoInput = document.getElementById('correo');
-                const savedCorreo = localStorage.getItem('medacademy_last_correo');
-                if (savedCorreo) {
-                    correoInput.value = savedCorreo;
-                }
-            }
-
-            // Guardar correo al enviar (para recuperar en error)
-            document.getElementById('loginForm').addEventListener('submit', function() {
-                const correo = document.getElementById('correo').value.trim();
-                if (correo) {
-                    localStorage.setItem('medacademy_last_correo', correo);
                 }
             });
 
