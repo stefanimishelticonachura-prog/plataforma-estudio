@@ -1,6 +1,7 @@
 <?php
 // ============================================================
 // RECUPERAR CONTRASEÑA - MEDACADEMY
+// Archivo: recuperacion.php (RAÍZ)
 // ============================================================
 
 // ========== CONFIGURACIÓN ==========
@@ -11,19 +12,19 @@ $url_login = "https://plataforma-estudio-9eot.onrender.com/";
 // ========== DETECTAR ENTORNO ==========
 $is_production = (getenv('ENVIRONMENT') === 'production' || getenv('RENDER'));
 
-// ========== CARGAR PHPMailer ==========
-require_once __DIR__ . '/../PHPMailer/src/PHPMailer.php';
-require_once __DIR__ . '/../PHPMailer/src/SMTP.php';
-require_once __DIR__ . '/../PHPMailer/src/Exception.php';
+// ========== CARGAR PHPMailer (RUTA CORRECTA) ==========
+// Como recuperacion.php está en la raíz, PHPMailer está en ./PHPMailer/
+require_once __DIR__ . '/PHPMailer/src/PHPMailer.php';
+require_once __DIR__ . '/PHPMailer/src/SMTP.php';
+require_once __DIR__ . '/PHPMailer/src/Exception.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-// ========== CONEXIÓN A LA BASE DE DATOS (USANDO TU ARCHIVO) ==========
-// IMPORTANTE: Ajusta esta ruta según donde esté tu database.php
-// Si está en config/database.php y este archivo está en views/
-require_once __DIR__ . '/../config/database.php';
+// ========== CONEXIÓN A LA BASE DE DATOS (RUTA CORRECTA) ==========
+// Como recuperacion.php está en la raíz, config está en ./config/
+require_once __DIR__ . '/config/database.php';
 
 // Verificar que la conexión $pdo existe
 if (!isset($pdo)) {
