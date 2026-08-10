@@ -12,13 +12,7 @@ $url_login = "https://plataforma-estudio-9eot.onrender.com/";
 require_once 'PHPMailer/src/PHPMailer.php';
 require_once 'PHPMailer/src/SMTP.php';
 require_once 'PHPMailer/src/Exception.php';
-
-// ========== CONEXIÓN A LA BASE DE DATOS ==========
-$host = 'localhost';
-$dbname = 'plataforma_estudio';
-$username = 'root';
-$password = '';
-
+require_once '../../config/database.php';
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
