@@ -1,7 +1,6 @@
 <?php
 // ============================================================
-// RECUPERAR CONTRASEÑA - MEDACADEMY
-// Archivo: recuperacion.php
+// RECUPERAR CONTRASEÑA - MEDACADEMY (CON DEBUG)
 // ============================================================
 
 // ========== CONFIGURACIÓN ==========
@@ -14,10 +13,9 @@ $is_production = (getenv('ENVIRONMENT') === 'production' || getenv('RENDER'));
 
 // ========== BUSCAR PHPMailer AUTOMÁTICAMENTE ==========
 $phpmailer_paths = [
-    __DIR__ . '/PHPMailer/src/PHPMailer.php',      // ./PHPMailer/src/
-    __DIR__ . '/PHPMailer/src/PHPMailer.php',      // mismo
-    __DIR__ . '/../PHPMailer/src/PHPMailer.php',   // ../PHPMailer/src/
-    __DIR__ . '/../../PHPMailer/src/PHPMailer.php', // ../../PHPMailer/src/
+    __DIR__ . '/PHPMailer/src/PHPMailer.php',
+    __DIR__ . '/../PHPMailer/src/PHPMailer.php',
+    __DIR__ . '/../../PHPMailer/src/PHPMailer.php',
 ];
 
 $found = false;
@@ -33,18 +31,18 @@ foreach ($phpmailer_paths as $path) {
 }
 
 if (!$found) {
-    die('❌ Error: No se encontró PHPMailer. Asegúrate de que la carpeta PHPMailer esté en la raíz del proyecto.');
+    die('❌ Error: No se encontró PHPMailer');
 }
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-// ========== BUSCAR database.php AUTOMÁTICAMENTE ==========
+// ========== BUSCAR database.php ==========
 $db_paths = [
-    __DIR__ . '/config/database.php',      // ./config/
-    __DIR__ . '/../config/database.php',   // ../config/
-    __DIR__ . '/../../config/database.php', // ../../config/
+    __DIR__ . '/config/database.php',
+    __DIR__ . '/../config/database.php',
+    __DIR__ . '/../../config/database.php',
 ];
 
 $db_found = false;
@@ -60,7 +58,6 @@ if (!$db_found) {
     die('❌ Error: No se encontró database.php');
 }
 
-// Verificar conexión
 if (!isset($pdo)) {
     die('❌ Error: No se pudo establecer conexión a la base de datos');
 }
@@ -69,6 +66,7 @@ if (!isset($pdo)) {
 $mensaje = '';
 $tipo_mensaje = '';
 $correo_ingresado = '';
+$debug_info = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $correo_usuario = trim($_POST['email'] ?? '');
@@ -111,22 +109,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mail = new PHPMailer(true);
                 
                 try {
-                    // Configuración SMTP
-                    $mail->SMTPDebug = 0;
+                    // ===== CONFIGURACIÓN SMTP CON DEBUG =====
+                    $mail->SMTPDebug = 2;  // <--- DEBUG ACTIVADO
+                    $mail->Debugoutput = function($str, $level) {
+                        $GLOBALS['debug_info'] .= "$str<br>";
+                    };
+                    
                     $mail->isSMTP();
                     $mail->Host = 'smtp.gmail.com';
                     $mail->SMTPAuth = true;
                     $mail->Username = $email_origen;
                     $mail->Password = str_replace(' ', '', $clave_app);
                     
-                    // En producción usar SSL, en local STARTTLS
-                    if ($is_production) {
-                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
-                        $mail->Port = 465;
-                    } else {
-                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                        $mail->Port = 587;
-                    }
+                    // Intentar con SSL primero (puerto 465)
+                    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
+                    $mail->Port = 465;
                     
                     $mail->setFrom($email_origen, 'MEDACADEMY');
                     $mail->addAddress($correo_usuario, $nombre_completo);
@@ -194,6 +191,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 } catch (Exception $e) {
                     $mensaje = 'Error al enviar el correo: ' . $mail->ErrorInfo;
                     $tipo_mensaje = 'error';
+                    $debug_info = $mail->ErrorInfo;
                 }
             }
         } catch (PDOException $e) {
@@ -204,7 +202,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
-<!-- EL HTML (igual que antes) -->
 <!DOCTYPE html>
 <html lang="es" data-theme="light">
 <head>
@@ -213,7 +210,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Recuperar Contraseña - MEDACADEMY</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* ===== CSS VARIABLES ===== */
+        /* ===== TODO EL CSS IGUAL QUE ANTES ===== */
         :root {
             --primary: #0A8E8C;
             --primary-dark: #06706E;
@@ -241,9 +238,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             --error-bg: #FEE2E2;
             --error-text: #991B1B;
             --error-border: #EF4444;
+            --debug-bg: #E8F4FD;
+            --debug-text: #0C4A6E;
         }
 
-        /* ===== DARK MODE ===== */
         [data-theme="dark"] {
             --bg-main: #0D1117;
             --bg-card: #161B22;
@@ -263,9 +261,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             --success-text: #6EE7B7;
             --error-bg: #2D1B1B;
             --error-text: #FCA5A5;
+            --debug-bg: #1A2E3D;
+            --debug-text: #7DD3FC;
         }
 
-        /* ===== RESET & BASE ===== */
         * {
             margin: 0;
             padding: 0;
@@ -285,7 +284,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin: 0;
         }
 
-        /* ===== MAIN CONTAINER ===== */
         .recover-wrapper {
             width: 100%;
             max-width: 1000px;
@@ -304,7 +302,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             box-shadow: var(--shadow-hover);
         }
 
-        /* ===== LEFT SIDE - IMAGE ===== */
         .recover-image {
             background: var(--primary-gradient);
             padding: 50px 40px;
@@ -420,7 +417,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             50% { opacity: 0.5; transform: scale(0.8); }
         }
 
-        /* ===== RIGHT SIDE - FORM ===== */
         .recover-form {
             padding: 50px 45px;
             display: flex;
@@ -430,7 +426,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             transition: background var(--transition);
         }
 
-        /* Theme Toggle */
         .theme-toggle {
             align-self: flex-end;
             background: var(--bg-input);
@@ -488,7 +483,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             background: var(--primary);
         }
 
-        /* Form Header */
         .form-header {
             margin-bottom: 30px;
         }
@@ -518,7 +512,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-weight: 400;
         }
 
-        /* Alertas */
         .alert {
             padding: 14px 18px;
             border-radius: 12px;
@@ -553,7 +546,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             flex-shrink: 0;
         }
 
-        /* Formulario */
+        .debug-box {
+            background: var(--debug-bg);
+            color: var(--debug-text);
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-size: 0.85rem;
+            font-family: 'Courier New', monospace;
+            border: 1px solid var(--border-color);
+            overflow-x: auto;
+            display: <?php echo $debug_info ? 'block' : 'none'; ?>;
+        }
+
+        .debug-box strong {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+
         .form-group {
             margin-bottom: 22px;
         }
@@ -620,7 +631,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             cursor: not-allowed;
         }
 
-        /* Email list hint */
         .email-hint {
             margin-top: 15px;
             padding: 14px 16px;
@@ -659,7 +669,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: var(--primary);
         }
 
-        /* Botón */
         .btn-recover {
             width: 100%;
             padding: 15px;
@@ -699,7 +708,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 1.1rem;
         }
 
-        /* Login Link */
         .login-link {
             text-align: center;
             margin-top: 25px;
@@ -719,7 +727,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             text-decoration: underline;
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 820px) {
             .recover-wrapper {
                 grid-template-columns: 1fr;
@@ -1054,6 +1061,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 </div>
             <?php endif; ?>
 
+            <!-- DEBUG BOX -->
+            <?php if ($debug_info): ?>
+                <div class="debug-box">
+                    <strong>🔍 DEBUG - Error de PHPMailer:</strong>
+                    <?php echo nl2br(htmlspecialchars($debug_info)); ?>
+                </div>
+            <?php endif; ?>
+
             <!-- Formulario -->
             <form method="POST" action="" id="recoverForm" autocomplete="off">
                 <div class="form-group">
@@ -1198,7 +1213,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
             });
 
-            <?php if ($tipo_mensaje === 'error'): ?>
+            <?php if ($tipo_mensaje === 'error' || $tipo_mensaje === 'exito'): ?>
                 isSubmitting = false;
                 submitBtn.disabled = false;
                 submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Enviar nueva contraseña';
