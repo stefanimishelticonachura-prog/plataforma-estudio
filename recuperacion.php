@@ -1090,18 +1090,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
 
-                <!-- Lista de correos de prueba -->
-                <div class="email-hint">
-                    <p>📋 Correos registrados para probar:</p>
-                    <div class="emails">
-                        <span>medel@gmail.com</span>
-                        <span>mishel@gmail.com</span>
-                        <span>laura@gmail.com</span>
-                        <span>cristal@gmail.com</span>
-                        <span>yo@gmail.com</span>
-                    </div>
-                </div>
-
                 <button type="submit" class="btn-recover" id="submitBtn" <?php echo $tipo_mensaje === 'exito' ? 'disabled' : ''; ?>>
                     <i class="fas fa-paper-plane"></i>
                     <?php echo $tipo_mensaje === 'exito' ? '¡Enviado con éxito!' : 'Enviar nueva contraseña'; ?>
