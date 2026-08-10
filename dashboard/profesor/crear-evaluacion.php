@@ -270,11 +270,67 @@ require_once 'includes/profesor_header.php';
 ?>
 
 <style>
+    /* ===== RESET & BASE ===== */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* ===== CONTENEDOR PRINCIPAL ===== */
     .gestion-container {
         max-width: 1200px;
         margin: 0 auto;
+        padding: 20px;
+        width: 100%;
     }
     
+    .gestion-container h3 {
+        font-size: 24px;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .gestion-container h3 i {
+        color: #e67e22;
+    }
+
+    /* ===== ALERTAS ===== */
+    .alert {
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: slideDown 0.4s ease;
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .alert i {
+        font-size: 20px;
+    }
+
+    .alert-error {
+        background-color: #fee;
+        color: #c33;
+        border: 1px solid #fcc;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    /* ===== MATERIAS GRID ===== */
     .materias-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -290,6 +346,7 @@ require_once 'includes/profesor_header.php';
         transition: transform 0.2s, box-shadow 0.2s;
         border-top: 4px solid #e67e22;
     }
+    
     .materia-card:hover {
         transform: translateY(-3px);
         box-shadow: 0 5px 25px rgba(0,0,0,0.12);
@@ -302,12 +359,23 @@ require_once 'includes/profesor_header.php';
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
     }
+    
     .materia-header h4 {
         margin: 0;
         color: #2c3e50;
         font-size: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
+    
+    .materia-header h4 i {
+        color: #e67e22;
+    }
+    
     .materia-header .badge-materia {
         background: #e67e22;
         color: white;
@@ -315,18 +383,22 @@ require_once 'includes/profesor_header.php';
         border-radius: 12px;
         font-size: 12px;
     }
+    
     .materia-body {
         padding: 15px 20px;
     }
     
+    /* ===== TEMA ITEM ===== */
     .tema-item {
         margin-bottom: 15px;
         border-left: 3px solid #f39c12;
         padding-left: 12px;
     }
+    
     .tema-item:last-child {
         margin-bottom: 0;
     }
+    
     .tema-item .tema-titulo {
         font-weight: 600;
         color: #2c3e50;
@@ -335,7 +407,10 @@ require_once 'includes/profesor_header.php';
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 5px;
     }
+    
     .tema-item .tema-titulo .badge-tema {
         background: #fef9e7;
         color: #f39c12;
@@ -345,6 +420,7 @@ require_once 'includes/profesor_header.php';
         font-weight: normal;
     }
     
+    /* ===== EVALUACION ITEM ===== */
     .evaluacion-item {
         background: #f8f9fa;
         border-radius: 6px;
@@ -353,43 +429,56 @@ require_once 'includes/profesor_header.php';
         display: flex;
         justify-content: space-between;
         align-items: center;
+        gap: 10px;
         transition: background 0.2s;
+        flex-wrap: wrap;
     }
+    
     .evaluacion-item:hover {
         background: #f0f0f0;
     }
+    
     .evaluacion-item .evaluacion-info {
         flex: 1;
         min-width: 0;
     }
+    
     .evaluacion-item .evaluacion-info .titulo {
         font-size: 13px;
         font-weight: 500;
         color: #2c3e50;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 5px;
     }
+    
     .evaluacion-item .evaluacion-info .titulo .badge-preguntas {
         background: #e3f2fd;
         color: #1976d2;
         padding: 1px 8px;
         border-radius: 10px;
         font-size: 10px;
-        margin-left: 5px;
     }
+    
     .evaluacion-item .evaluacion-info .subtitulo {
         font-size: 11px;
         color: #999;
         display: block;
         margin-top: 2px;
     }
+    
     .evaluacion-item .evaluacion-info .subtitulo span {
         margin-right: 10px;
     }
+    
     .evaluacion-item .evaluacion-actions {
         display: flex;
         gap: 4px;
         flex-shrink: 0;
-        margin-left: 10px;
+        flex-wrap: wrap;
     }
+    
     .evaluacion-item .evaluacion-actions .btn-sm {
         padding: 3px 8px;
         font-size: 11px;
@@ -400,7 +489,13 @@ require_once 'includes/profesor_header.php';
         display: inline-flex;
         align-items: center;
         gap: 3px;
+        transition: all 0.2s;
     }
+    
+    .evaluacion-item .evaluacion-actions .btn-sm:hover {
+        transform: scale(1.05);
+    }
+    
     .btn-edit-sm { background: #3498db; color: white; }
     .btn-edit-sm:hover { background: #2980b9; }
     .btn-delete-sm { background: #e74c3c; color: white; }
@@ -422,10 +517,10 @@ require_once 'includes/profesor_header.php';
         font-size: 10px;
         font-weight: 500;
     }
-    .badge-estado-eval.activa { background: #d4edda; color: #155724; }
-    .badge-estado-eval.inactiva { background: #f8d7da; color: #721c24; }
+    .badge-estado-eval.activo { background: #d4edda; color: #155724; }
+    .badge-estado-eval.inactivo { background: #f8d7da; color: #721c24; }
     
-    /* BOTÓN FLOTANTE */
+    /* ===== BOTÓN FLOTANTE ===== */
     .btn-flotante {
         position: fixed;
         bottom: 30px;
@@ -445,16 +540,22 @@ require_once 'includes/profesor_header.php';
         align-items: center;
         gap: 10px;
     }
+    
     .btn-flotante:hover {
         transform: scale(1.05);
         box-shadow: 0 6px 30px rgba(230, 126, 34, 0.5);
         background: #d35400;
     }
+    
+    .btn-flotante:active {
+        transform: scale(0.95);
+    }
+    
     .btn-flotante i {
         font-size: 20px;
     }
     
-    /* MODAL */
+    /* ===== MODAL ===== */
     .modal-overlay {
         display: none;
         position: fixed;
@@ -467,10 +568,13 @@ require_once 'includes/profesor_header.php';
         justify-content: center;
         align-items: center;
         padding: 20px;
+        backdrop-filter: blur(4px);
     }
+    
     .modal-overlay.show {
         display: flex;
     }
+    
     .modal-content {
         background: white;
         border-radius: 15px;
@@ -482,10 +586,12 @@ require_once 'includes/profesor_header.php';
         position: relative;
         animation: modalIn 0.3s ease;
     }
+    
     @keyframes modalIn {
-        from { transform: translateY(-30px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
+        from { transform: translateY(-30px) scale(0.95); opacity: 0; }
+        to { transform: translateY(0) scale(1); opacity: 1; }
     }
+    
     .modal-content .modal-header {
         display: flex;
         justify-content: space-between;
@@ -493,11 +599,25 @@ require_once 'includes/profesor_header.php';
         margin-bottom: 20px;
         padding-bottom: 15px;
         border-bottom: 2px solid #f0f0f0;
+        position: sticky;
+        top: 0;
+        background: white;
+        z-index: 10;
     }
+    
     .modal-content .modal-header h3 {
         margin: 0;
         color: #2c3e50;
+        font-size: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
+    
+    .modal-content .modal-header h3 i {
+        color: #e67e22;
+    }
+    
     .modal-content .modal-header .btn-close-modal {
         background: none;
         border: none;
@@ -506,22 +626,29 @@ require_once 'includes/profesor_header.php';
         color: #999;
         transition: color 0.3s;
         line-height: 1;
+        padding: 0 10px;
     }
+    
     .modal-content .modal-header .btn-close-modal:hover {
         color: #333;
     }
+    
     .modal-content .form-group {
         margin-bottom: 15px;
     }
+    
     .modal-content .form-group label {
         display: block;
         margin-bottom: 5px;
         font-weight: 500;
         color: #555;
+        font-size: 14px;
     }
+    
     .modal-content .form-group label .required {
         color: #e74c3c;
     }
+    
     .modal-content .form-group input,
     .modal-content .form-group textarea,
     .modal-content .form-group select {
@@ -531,22 +658,27 @@ require_once 'includes/profesor_header.php';
         border-radius: 8px;
         font-size: 14px;
         transition: border-color 0.3s;
+        font-family: inherit;
     }
+    
     .modal-content .form-group input:focus,
     .modal-content .form-group textarea:focus,
     .modal-content .form-group select:focus {
         outline: none;
         border-color: #e67e22;
     }
+    
     .modal-content .form-group textarea {
         resize: vertical;
         min-height: 60px;
     }
+    
     .modal-content .form-row {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 15px;
     }
+    
     .modal-content .btn-submit-modal {
         background: #e67e22;
         color: white;
@@ -556,13 +688,20 @@ require_once 'includes/profesor_header.php';
         font-weight: 600;
         cursor: pointer;
         font-size: 16px;
-        transition: background 0.3s;
+        transition: background 0.3s, transform 0.2s;
         width: 100%;
         margin-top: 10px;
     }
+    
     .modal-content .btn-submit-modal:hover {
         background: #d35400;
+        transform: scale(1.01);
     }
+    
+    .modal-content .btn-submit-modal:active {
+        transform: scale(0.98);
+    }
+    
     .modal-content .info-box {
         background: #f8f9fa;
         padding: 12px 15px;
@@ -571,17 +710,19 @@ require_once 'includes/profesor_header.php';
         border-left: 4px solid #e67e22;
         font-size: 13px;
     }
+    
     .modal-content .info-box i {
         color: #e67e22;
         margin-right: 8px;
     }
+    
     .modal-content .loading-temas {
         color: #999;
         font-size: 13px;
         padding: 5px 0;
     }
     
-    /* PREGUNTAS */
+    /* ===== PREGUNTAS ===== */
     .pregunta-item {
         background: #f8f9fa;
         border-radius: 8px;
@@ -589,18 +730,28 @@ require_once 'includes/profesor_header.php';
         margin-bottom: 10px;
         border-left: 3px solid #e67e22;
         position: relative;
+        transition: all 0.2s;
     }
+    
+    .pregunta-item:hover {
+        background: #f5f5f5;
+    }
+    
     .pregunta-item .pregunta-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 10px;
+        flex-wrap: wrap;
+        gap: 5px;
     }
+    
     .pregunta-item .pregunta-header .pregunta-numero {
         font-weight: 600;
         color: #e67e22;
         font-size: 14px;
     }
+    
     .pregunta-item .pregunta-header .btn-remove-pregunta {
         background: #e74c3c;
         color: white;
@@ -609,21 +760,27 @@ require_once 'includes/profesor_header.php';
         padding: 3px 10px;
         cursor: pointer;
         font-size: 12px;
+        transition: background 0.2s;
     }
+    
     .pregunta-item .pregunta-header .btn-remove-pregunta:hover {
         background: #c0392b;
     }
+    
     .pregunta-item .form-group {
         margin-bottom: 8px;
     }
+    
     .pregunta-item .form-group label {
         font-size: 12px;
         color: #666;
     }
+    
     .pregunta-item .form-group textarea {
         min-height: 40px;
         resize: vertical;
     }
+    
     .pregunta-item .form-group input[type="text"] {
         width: 100%;
         padding: 8px;
@@ -631,10 +788,12 @@ require_once 'includes/profesor_header.php';
         border-radius: 5px;
         font-size: 13px;
     }
+    
     .pregunta-item .form-group input[type="text"]:focus {
         outline: none;
         border-color: #e67e22;
     }
+    
     .pregunta-item .form-group textarea {
         width: 100%;
         padding: 8px;
@@ -643,10 +802,12 @@ require_once 'includes/profesor_header.php';
         font-size: 13px;
         font-family: inherit;
     }
+    
     .pregunta-item .form-group textarea:focus {
         outline: none;
         border-color: #e67e22;
     }
+    
     .pregunta-item .form-group select {
         width: 100%;
         padding: 8px;
@@ -654,17 +815,21 @@ require_once 'includes/profesor_header.php';
         border-radius: 5px;
         font-size: 13px;
     }
+    
     .pregunta-item .form-group select:focus {
         outline: none;
         border-color: #e67e22;
     }
+    
     .pregunta-item .opciones-container {
         margin-top: 5px;
     }
+    
     .pregunta-item .opciones-container textarea {
         min-height: 60px;
         font-size: 13px;
     }
+    
     .pregunta-item .opciones-container .help-text {
         font-size: 11px;
         color: #999;
@@ -682,10 +847,16 @@ require_once 'includes/profesor_header.php';
         font-weight: 500;
         width: 100%;
         margin-top: 10px;
-        transition: background 0.3s;
+        transition: background 0.3s, transform 0.2s;
     }
+    
     .btn-add-pregunta:hover {
         background: #2980b9;
+        transform: scale(1.01);
+    }
+    
+    .btn-add-pregunta:active {
+        transform: scale(0.98);
     }
     
     .preguntas-section {
@@ -693,36 +864,450 @@ require_once 'includes/profesor_header.php';
         padding-top: 20px;
         border-top: 2px solid #f0f0f0;
     }
+    
     .preguntas-section h4 {
         color: #2c3e50;
         margin-bottom: 15px;
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
     
-    @media (max-width: 768px) {
+    .preguntas-section h4 i {
+        color: #e67e22;
+    }
+
+    /* ===== EMPTY STATE ===== */
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .empty-state i {
+        font-size: 64px;
+        color: #ccc;
+        display: block;
+        margin-bottom: 20px;
+    }
+    
+    .empty-state h4 {
+        color: #666;
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+    
+    .empty-state p {
+        color: #999;
+        font-size: 14px;
+    }
+
+    /* ===== RESPONSIVE - TABLETS ===== */
+    @media (max-width: 1024px) {
+        .gestion-container {
+            padding: 15px;
+        }
+        
+        .gestion-container h3 {
+            font-size: 22px;
+        }
+        
+        .materias-grid {
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+    }
+
+    /* ===== RESPONSIVE - MÓVILES Y TABLETS PEQUEÑAS ===== */
+    @media (max-width: 820px) {
+        .gestion-container {
+            padding: 12px;
+        }
+        
+        .gestion-container h3 {
+            font-size: 20px;
+        }
+        
         .materias-grid {
             grid-template-columns: 1fr;
+            gap: 15px;
         }
+        
+        .materia-header {
+            padding: 12px 15px;
+        }
+        
+        .materia-header h4 {
+            font-size: 16px;
+        }
+        
+        .materia-body {
+            padding: 12px 15px;
+        }
+        
+        .tema-item {
+            padding-left: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .tema-item .tema-titulo {
+            font-size: 13px;
+        }
+        
+        .evaluacion-item {
+            flex-direction: column;
+            align-items: stretch;
+            gap: 8px;
+            padding: 10px 12px;
+        }
+        
+        .evaluacion-item .evaluacion-info .titulo {
+            font-size: 12px;
+        }
+        
+        .evaluacion-item .evaluacion-info .subtitulo {
+            font-size: 10px;
+        }
+        
+        .evaluacion-item .evaluacion-info .subtitulo span {
+            margin-right: 6px;
+        }
+        
+        .evaluacion-item .evaluacion-actions {
+            justify-content: flex-end;
+            width: 100%;
+        }
+        
+        .evaluacion-item .evaluacion-actions .btn-sm {
+            padding: 4px 10px;
+            font-size: 12px;
+        }
+        
+        .modal-content {
+            padding: 20px;
+            max-height: 95vh;
+        }
+        
+        .modal-content .modal-header h3 {
+            font-size: 17px;
+        }
+        
         .modal-content .form-row {
             grid-template-columns: 1fr;
+            gap: 10px;
         }
+        
+        .modal-content .form-group input,
+        .modal-content .form-group textarea,
+        .modal-content .form-group select {
+            font-size: 13px;
+            padding: 8px;
+        }
+        
+        .pregunta-item {
+            padding: 12px;
+        }
+        
+        .pregunta-item .form-group input[type="text"],
+        .pregunta-item .form-group textarea,
+        .pregunta-item .form-group select {
+            font-size: 12px;
+        }
+        
         .btn-flotante {
             bottom: 20px;
             right: 20px;
             padding: 12px 18px;
             font-size: 14px;
         }
+        
         .btn-flotante span {
             display: none;
         }
+        
+        .btn-flotante i {
+            font-size: 24px;
+        }
+    }
+
+    /* ===== RESPONSIVE - MÓVILES PEQUEÑOS ===== */
+    @media (max-width: 480px) {
+        .gestion-container {
+            padding: 8px;
+        }
+        
+        .gestion-container h3 {
+            font-size: 17px;
+        }
+        
+        .materia-card {
+            border-radius: 10px;
+        }
+        
+        .materia-header {
+            padding: 10px 12px;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .materia-header h4 {
+            font-size: 14px;
+        }
+        
+        .materia-header .badge-materia {
+            font-size: 10px;
+        }
+        
+        .materia-body {
+            padding: 10px 12px;
+        }
+        
+        .tema-item {
+            padding-left: 6px;
+        }
+        
+        .tema-item .tema-titulo {
+            font-size: 12px;
+        }
+        
+        .tema-item .tema-titulo .badge-tema {
+            font-size: 10px;
+        }
+        
         .evaluacion-item {
+            padding: 8px 10px;
+        }
+        
+        .evaluacion-item .evaluacion-info .titulo {
+            font-size: 11px;
+        }
+        
+        .evaluacion-item .evaluacion-info .subtitulo {
+            font-size: 9px;
+        }
+        
+        .evaluacion-item .evaluacion-info .subtitulo span {
+            display: inline-block;
+            margin-right: 4px;
+        }
+        
+        .evaluacion-item .evaluacion-actions .btn-sm {
+            padding: 3px 8px;
+            font-size: 10px;
+        }
+        
+        .badge-estado-eval {
+            font-size: 8px;
+            padding: 1px 6px;
+        }
+        
+        .modal-content {
+            padding: 15px;
+            border-radius: 10px;
+        }
+        
+        .modal-content .modal-header {
             flex-wrap: wrap;
         }
-        .evaluacion-item .evaluacion-actions {
-            margin-left: 0;
-            margin-top: 5px;
-            width: 100%;
-            justify-content: flex-end;
+        
+        .modal-content .modal-header h3 {
+            font-size: 15px;
         }
+        
+        .modal-content .modal-header .btn-close-modal {
+            font-size: 24px;
+        }
+        
+        .modal-content .form-group {
+            margin-bottom: 10px;
+        }
+        
+        .modal-content .form-group label {
+            font-size: 12px;
+        }
+        
+        .modal-content .form-group input,
+        .modal-content .form-group textarea,
+        .modal-content .form-group select {
+            font-size: 12px;
+            padding: 6px;
+        }
+        
+        .modal-content .btn-submit-modal {
+            font-size: 14px;
+            padding: 10px;
+        }
+        
+        .modal-content .info-box {
+            font-size: 12px;
+            padding: 10px 12px;
+        }
+        
+        .pregunta-item {
+            padding: 10px;
+        }
+        
+        .pregunta-item .pregunta-header .pregunta-numero {
+            font-size: 12px;
+        }
+        
+        .pregunta-item .pregunta-header .btn-remove-pregunta {
+            font-size: 10px;
+            padding: 2px 8px;
+        }
+        
+        .pregunta-item .form-group label {
+            font-size: 11px;
+        }
+        
+        .pregunta-item .form-group input[type="text"],
+        .pregunta-item .form-group textarea,
+        .pregunta-item .form-group select {
+            font-size: 11px;
+            padding: 6px;
+        }
+        
+        .btn-add-pregunta {
+            font-size: 12px;
+            padding: 8px 16px;
+        }
+        
+        .btn-flotante {
+            bottom: 15px;
+            right: 15px;
+            padding: 10px 14px;
+        }
+        
+        .btn-flotante i {
+            font-size: 20px;
+        }
+        
+        .sin-evaluaciones {
+            font-size: 12px;
+        }
+        
+        .empty-state i {
+            font-size: 48px;
+        }
+        
+        .empty-state h4 {
+            font-size: 17px;
+        }
+        
+        .empty-state p {
+            font-size: 13px;
+        }
+    }
+
+    /* ===== RESPONSIVE - MÓVILES MUY PEQUEÑOS ===== */
+    @media (max-width: 360px) {
+        .gestion-container {
+            padding: 4px;
+        }
+        
+        .gestion-container h3 {
+            font-size: 15px;
+        }
+        
+        .materia-header h4 {
+            font-size: 13px;
+        }
+        
+        .evaluacion-item .evaluacion-info .titulo {
+            font-size: 10px;
+        }
+        
+        .evaluacion-item .evaluacion-actions .btn-sm {
+            font-size: 9px;
+            padding: 2px 6px;
+        }
+        
+        .modal-content {
+            padding: 10px;
+        }
+        
+        .modal-content .modal-header h3 {
+            font-size: 13px;
+        }
+        
+        .pregunta-item {
+            padding: 8px;
+        }
+        
+        .pregunta-item .form-group input[type="text"],
+        .pregunta-item .form-group textarea,
+        .pregunta-item .form-group select {
+            font-size: 10px;
+            padding: 4px;
+        }
+    }
+
+    /* ===== SOPORTE PARA ORIENTACIÓN HORIZONTAL ===== */
+    @media (max-height: 600px) and (orientation: landscape) {
+        .materias-grid {
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        }
+        
+        .modal-content {
+            max-height: 95vh;
+        }
+        
+        .modal-content .form-group {
+            margin-bottom: 8px;
+        }
+        
+        .modal-content .form-group input,
+        .modal-content .form-group textarea,
+        .modal-content .form-group select {
+            padding: 6px;
+        }
+        
+        .pregunta-item {
+            padding: 8px 12px;
+            margin-bottom: 6px;
+        }
+        
+        .pregunta-item .form-group {
+            margin-bottom: 4px;
+        }
+        
+        .pregunta-item .form-group textarea {
+            min-height: 30px;
+        }
+        
+        .btn-flotante {
+            bottom: 15px;
+            right: 15px;
+            padding: 10px 16px;
+        }
+    }
+
+    /* ===== MEJORAS DE ACCESIBILIDAD ===== */
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+
+    /* ===== SCROLL SUAVE ===== */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* ===== SELECTION ===== */
+    ::selection {
+        background: #e67e22;
+        color: white;
+    }
+
+    /* ===== UTILITY ===== */
+    .hidden {
+        display: none !important;
     }
 </style>
 
@@ -745,17 +1330,17 @@ require_once 'includes/profesor_header.php';
 
     <!-- VISTA POR MATERIAS -->
     <?php if (empty($evaluaciones_por_materia)): ?>
-        <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-            <i class="fas fa-file-signature" style="font-size: 64px; color: #ccc; display: block; margin-bottom: 20px;"></i>
-            <h4 style="color: #666; margin-bottom: 10px;">No tienes evaluaciones creadas</h4>
-            <p style="color: #999; font-size: 14px;">Haz clic en el botón <strong>"+ Nueva Evaluación"</strong> para comenzar</p>
+        <div class="empty-state">
+            <i class="fas fa-file-signature"></i>
+            <h4>No tienes evaluaciones creadas</h4>
+            <p>Haz clic en el botón <strong>"+ Nueva Evaluación"</strong> para comenzar</p>
         </div>
     <?php else: ?>
         <div class="materias-grid">
             <?php foreach ($evaluaciones_por_materia as $materia_id => $materia): ?>
                 <div class="materia-card">
                     <div class="materia-header">
-                        <h4><i class="fas fa-book" style="color: #e67e22; margin-right: 8px;"></i><?php echo htmlspecialchars($materia['nombre']); ?></h4>
+                        <h4><i class="fas fa-book"></i><?php echo htmlspecialchars($materia['nombre']); ?></h4>
                         <span class="badge-materia">
                             <?php 
                             $total_evaluaciones = 0;

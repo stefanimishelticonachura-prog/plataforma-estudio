@@ -61,12 +61,20 @@ try {
 }
 ?>
 
-<!-- Estilos para el dashboard del profesor con IA -->
+<!-- Estilos para el dashboard del profesor con IA y responsividad -->
 <style>
-    /* ===== ESTILOS BASE ===== */
+    /* ===== RESET & BASE ===== */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* ===== CONTENEDOR PRINCIPAL ===== */
     .dashboard-ia-container {
         padding: 20px;
         max-width: 100%;
+        width: 100%;
     }
 
     /* ===== STATS CARDS ===== */
@@ -147,6 +155,8 @@ try {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 10px;
     }
 
     .ia-panel-header h3 {
@@ -212,6 +222,7 @@ try {
         font-size: 14px;
         line-height: 1.5;
         animation: slideIn 0.3s ease;
+        word-wrap: break-word;
     }
 
     @keyframes slideIn {
@@ -245,6 +256,7 @@ try {
         background: white;
         border-top: 1px solid #e5e7eb;
         align-items: center;
+        flex-wrap: wrap;
     }
 
     .chat-input-area input {
@@ -255,6 +267,7 @@ try {
         font-size: 14px;
         outline: none;
         transition: border-color 0.2s;
+        min-width: 120px;
     }
 
     .chat-input-area input:focus {
@@ -316,6 +329,7 @@ try {
         padding: 20px;
         box-shadow: 0 2px 8px rgba(0,0,0,0.06);
         margin-bottom: 30px;
+        overflow-x: auto;
     }
 
     .info-card h4 {
@@ -330,6 +344,7 @@ try {
     .info-card table {
         width: 100%;
         border-collapse: collapse;
+        min-width: 300px;
     }
 
     .info-card td {
@@ -421,22 +436,6 @@ try {
         color: #6b7280;
     }
 
-    /* ===== ALERTAS ===== */
-    .alert {
-        padding: 16px 20px;
-        border-radius: 12px;
-        margin-bottom: 20px;
-        display: flex;
-        align-items: center;
-        gap: 12px;
-    }
-
-    .alert-success {
-        background: #ecfdf5;
-        color: #065f46;
-        border: 1px solid #a7f3d0;
-    }
-
     /* ===== BOTÓN DE AYUDA IA ===== */
     .ia-helper {
         position: fixed;
@@ -470,16 +469,420 @@ try {
         transform: scale(0.95);
     }
 
-    @media (max-width: 768px) {
+    /* ===== RESPONSIVE - TABLETS ===== */
+    @media (max-width: 1024px) {
+        .dashboard-ia-container {
+            padding: 15px;
+        }
+        
+        .stats-grid {
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
+        }
+        
+        .stat-card {
+            padding: 16px;
+        }
+        
+        .stat-card .stat-info h3 {
+            font-size: 24px;
+        }
+        
+        .actions-grid {
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+        }
+    }
+
+    /* ===== RESPONSIVE - MÓVILES Y TABLETS PEQUEÑAS ===== */
+    @media (max-width: 820px) {
+        .dashboard-ia-container {
+            padding: 12px;
+        }
+        
+        .stats-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .stat-card {
+            padding: 14px;
+            gap: 12px;
+        }
+        
+        .stat-icon {
+            width: 44px;
+            height: 44px;
+            font-size: 20px;
+        }
+        
+        .stat-card .stat-info h3 {
+            font-size: 22px;
+        }
+        
+        .stat-card .stat-info p {
+            font-size: 12px;
+        }
+        
+        .ia-panel-header {
+            padding: 14px 18px;
+        }
+        
+        .ia-panel-header h3 {
+            font-size: 16px;
+        }
+        
+        .ia-body {
+            padding: 14px;
+        }
+        
+        .chat-container {
+            height: 380px;
+        }
+        
+        .chat-message {
+            max-width: 90%;
+            font-size: 13px;
+            padding: 10px 14px;
+        }
+        
+        .chat-input-area {
+            padding: 10px 14px;
+        }
+        
+        .chat-input-area input {
+            font-size: 13px;
+            padding: 8px 12px;
+        }
+        
+        .chat-input-area button {
+            padding: 8px 16px;
+            font-size: 13px;
+        }
+        
+        .actions-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .action-card {
+            padding: 16px;
+        }
+        
+        .action-icon {
+            width: 40px;
+            height: 40px;
+            font-size: 17px;
+        }
+        
+        .action-card h4 {
+            font-size: 14px;
+        }
+        
+        .action-card p {
+            font-size: 12px;
+        }
+        
+        .info-card {
+            padding: 16px;
+        }
+        
+        .info-card table {
+            min-width: 250px;
+        }
+        
+        .info-card td {
+            padding: 6px 0;
+            font-size: 13px;
+        }
+        
         .ia-helper {
             bottom: 20px;
             right: 20px;
         }
+        
         .ia-helper-btn {
             width: 50px;
             height: 50px;
             font-size: 22px;
         }
+    }
+
+    /* ===== RESPONSIVE - MÓVILES PEQUEÑOS ===== */
+    @media (max-width: 480px) {
+        .dashboard-ia-container {
+            padding: 8px;
+        }
+        
+        .stats-grid {
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+        
+        .stat-card {
+            padding: 12px;
+            gap: 10px;
+            border-radius: 12px;
+        }
+        
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+            border-radius: 10px;
+        }
+        
+        .stat-card .stat-info h3 {
+            font-size: 18px;
+        }
+        
+        .stat-card .stat-info p {
+            font-size: 10px;
+        }
+        
+        .ia-panel {
+            border-radius: 12px;
+        }
+        
+        .ia-panel-header {
+            padding: 12px 14px;
+        }
+        
+        .ia-panel-header h3 {
+            font-size: 14px;
+        }
+        
+        .ia-status {
+            font-size: 11px;
+        }
+        
+        .ia-body {
+            padding: 10px;
+        }
+        
+        .chat-container {
+            height: 320px;
+            border-radius: 8px;
+        }
+        
+        .chat-messages {
+            padding: 10px;
+            gap: 8px;
+        }
+        
+        .chat-message {
+            max-width: 92%;
+            font-size: 12px;
+            padding: 8px 12px;
+            border-radius: 10px;
+        }
+        
+        .chat-input-area {
+            padding: 8px 10px;
+            gap: 6px;
+        }
+        
+        .chat-input-area input {
+            font-size: 12px;
+            padding: 8px 10px;
+            border-radius: 6px;
+            min-width: 80px;
+        }
+        
+        .chat-input-area button {
+            padding: 8px 14px;
+            font-size: 12px;
+            border-radius: 6px;
+        }
+        
+        .actions-grid {
+            grid-template-columns: 1fr;
+            gap: 10px;
+        }
+        
+        .action-card {
+            padding: 14px;
+            border-radius: 10px;
+        }
+        
+        .action-icon {
+            width: 36px;
+            height: 36px;
+            font-size: 15px;
+        }
+        
+        .action-card h4 {
+            font-size: 13px;
+        }
+        
+        .action-card p {
+            font-size: 11px;
+        }
+        
+        .info-card {
+            padding: 14px;
+            border-radius: 12px;
+        }
+        
+        .info-card h4 {
+            font-size: 14px;
+        }
+        
+        .info-card table {
+            min-width: 200px;
+            font-size: 12px;
+        }
+        
+        .info-card td {
+            padding: 5px 0;
+            font-size: 12px;
+        }
+        
+        .badge {
+            font-size: 10px;
+            padding: 2px 8px;
+        }
+        
+        .ia-helper {
+            bottom: 15px;
+            right: 15px;
+        }
+        
+        .ia-helper-btn {
+            width: 44px;
+            height: 44px;
+            font-size: 18px;
+        }
+        
+        .typing-indicator span {
+            width: 6px;
+            height: 6px;
+        }
+    }
+
+    /* ===== RESPONSIVE - MÓVILES MUY PEQUEÑOS ===== */
+    @media (max-width: 360px) {
+        .dashboard-ia-container {
+            padding: 4px;
+        }
+        
+        .stats-grid {
+            gap: 6px;
+        }
+        
+        .stat-card {
+            padding: 8px 10px;
+            gap: 8px;
+        }
+        
+        .stat-icon {
+            width: 30px;
+            height: 30px;
+            font-size: 14px;
+            border-radius: 8px;
+        }
+        
+        .stat-card .stat-info h3 {
+            font-size: 16px;
+        }
+        
+        .stat-card .stat-info p {
+            font-size: 9px;
+        }
+        
+        .chat-container {
+            height: 280px;
+        }
+        
+        .chat-message {
+            font-size: 11px;
+            padding: 6px 10px;
+        }
+        
+        .chat-input-area input {
+            font-size: 11px;
+            padding: 6px 8px;
+        }
+        
+        .chat-input-area button {
+            padding: 6px 10px;
+            font-size: 11px;
+        }
+        
+        .action-card {
+            padding: 12px;
+        }
+        
+        .action-icon {
+            width: 32px;
+            height: 32px;
+            font-size: 13px;
+        }
+    }
+
+    /* ===== SOPORTE PARA ORIENTACIÓN HORIZONTAL ===== */
+    @media (max-height: 600px) and (orientation: landscape) {
+        .chat-container {
+            height: 250px;
+        }
+        
+        .stats-grid {
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 10px;
+        }
+        
+        .stat-card {
+            padding: 10px 14px;
+        }
+        
+        .stat-icon {
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+        }
+        
+        .stat-card .stat-info h3 {
+            font-size: 20px;
+        }
+        
+        .ia-panel-header {
+            padding: 10px 16px;
+        }
+        
+        .ia-body {
+            padding: 10px;
+        }
+    }
+
+    /* ===== MEJORAS DE ACCESIBILIDAD ===== */
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+
+    /* ===== SELECTION ===== */
+    ::selection {
+        background: #667eea;
+        color: white;
+    }
+
+    /* ===== UTILITY ===== */
+    .hidden {
+        display: none !important;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .mt-20 {
+        margin-top: 20px;
+    }
+
+    .mb-20 {
+        margin-bottom: 20px;
     }
 </style>
 
@@ -531,6 +934,7 @@ try {
             <h3><i class="fas fa-robot"></i> Asistente IA SYSGOV</h3>
             <div class="ia-status">
                 <span class="ia-status-dot"></span>
+                <span>Activo</span>
             </div>
         </div>
         <div class="ia-body">

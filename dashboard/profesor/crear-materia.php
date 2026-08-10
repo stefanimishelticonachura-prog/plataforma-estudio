@@ -81,6 +81,14 @@ require_once 'includes/profesor_header.php';
 ?>
 
 <style>
+    /* ===== RESET & BASE ===== */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    /* ===== CONTENEDOR PRINCIPAL ===== */
     .form-container {
         background: white;
         padding: 30px;
@@ -88,19 +96,71 @@ require_once 'includes/profesor_header.php';
         box-shadow: 0 2px 10px rgba(0,0,0,0.05);
         max-width: 800px;
         margin: 0 auto;
+        width: 100%;
     }
+    
+    .page-title {
+        font-size: 24px;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .page-title i {
+        color: #9b59b6;
+    }
+
+    /* ===== ALERTAS ===== */
+    .alert {
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: slideDown 0.4s ease;
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .alert i {
+        font-size: 20px;
+    }
+
+    .alert-error {
+        background-color: #fee;
+        color: #c33;
+        border: 1px solid #fcc;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
+    /* ===== FORMULARIO ===== */
     .form-group {
         margin-bottom: 20px;
     }
+    
     .form-group label {
         display: block;
         margin-bottom: 5px;
         font-weight: 500;
         color: #555;
+        font-size: 14px;
     }
+    
     .form-group label .required {
         color: #e74c3c;
     }
+    
     .form-group input,
     .form-group textarea,
     .form-group select {
@@ -110,17 +170,22 @@ require_once 'includes/profesor_header.php';
         border-radius: 8px;
         font-size: 14px;
         transition: border-color 0.3s;
+        font-family: inherit;
     }
+    
     .form-group input:focus,
     .form-group textarea:focus,
     .form-group select:focus {
         outline: none;
         border-color: #9b59b6;
     }
+    
     .form-group textarea {
         resize: vertical;
         min-height: 80px;
     }
+
+    /* ===== BOTONES ===== */
     .btn-submit {
         background: #9b59b6;
         color: white;
@@ -130,12 +195,20 @@ require_once 'includes/profesor_header.php';
         font-weight: 600;
         cursor: pointer;
         font-size: 16px;
-        transition: background 0.3s;
+        transition: all 0.3s;
         width: 100%;
     }
+    
     .btn-submit:hover {
         background: #8e44ad;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
     }
+    
+    .btn-submit:active {
+        transform: translateY(0);
+    }
+    
     .btn-cancel {
         background: #95a5a6;
         color: white;
@@ -145,42 +218,76 @@ require_once 'includes/profesor_header.php';
         font-weight: 600;
         cursor: pointer;
         font-size: 16px;
-        transition: background 0.3s;
+        transition: all 0.3s;
         width: 100%;
         margin-top: 10px;
         text-align: center;
         text-decoration: none;
         display: inline-block;
     }
+    
     .btn-cancel:hover {
         background: #7f8c8d;
+        transform: translateY(-2px);
     }
+    
+    .btn-cancel:active {
+        transform: translateY(0);
+    }
+
+    /* ===== TEMAS ===== */
     .temas-container {
         background: #f8f9fa;
         padding: 15px;
         border-radius: 8px;
         border: 2px dashed #e0e0e0;
-        max-height: 400px;
+        max-height: 450px;
         overflow-y: auto;
     }
+    
+    .temas-container::-webkit-scrollbar {
+        width: 6px;
+    }
+    
+    .temas-container::-webkit-scrollbar-track {
+        background: #f1f1f1;
+        border-radius: 10px;
+    }
+    
+    .temas-container::-webkit-scrollbar-thumb {
+        background: #9b59b6;
+        border-radius: 10px;
+    }
+    
     .tema-item {
         background: white;
         padding: 12px;
         border-radius: 8px;
         margin-bottom: 10px;
         border: 1px solid #e0e0e0;
+        transition: all 0.2s;
     }
+    
+    .tema-item:hover {
+        border-color: #9b59b6;
+        box-shadow: 0 2px 8px rgba(155, 89, 182, 0.1);
+    }
+    
     .tema-item .tema-header {
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-bottom: 8px;
+        flex-wrap: wrap;
+        gap: 5px;
     }
+    
     .tema-item .tema-header .tema-numero {
         font-weight: 600;
         color: #9b59b6;
         font-size: 13px;
     }
+    
     .tema-item input,
     .tema-item textarea {
         width: 100%;
@@ -189,16 +296,21 @@ require_once 'includes/profesor_header.php';
         border-radius: 5px;
         font-size: 14px;
         margin-bottom: 8px;
+        font-family: inherit;
+        transition: border-color 0.3s;
     }
+    
     .tema-item input:focus,
     .tema-item textarea:focus {
         outline: none;
         border-color: #9b59b6;
     }
+    
     .tema-item textarea {
         resize: vertical;
         min-height: 50px;
     }
+    
     .tema-item .btn-remove-tema {
         background: #e74c3c;
         color: white;
@@ -207,10 +319,18 @@ require_once 'includes/profesor_header.php';
         padding: 5px 12px;
         cursor: pointer;
         font-size: 13px;
+        transition: all 0.2s;
     }
+    
     .tema-item .btn-remove-tema:hover {
         background: #c0392b;
+        transform: scale(1.05);
     }
+    
+    .tema-item .btn-remove-tema:active {
+        transform: scale(0.95);
+    }
+    
     .btn-add-tema {
         background: #3498db;
         color: white;
@@ -221,10 +341,19 @@ require_once 'includes/profesor_header.php';
         font-size: 14px;
         margin-top: 10px;
         width: 100%;
+        transition: all 0.3s;
     }
+    
     .btn-add-tema:hover {
         background: #2980b9;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
     }
+    
+    .btn-add-tema:active {
+        transform: translateY(0);
+    }
+    
     .info-box {
         background: #e8f5e9;
         padding: 12px 15px;
@@ -234,18 +363,315 @@ require_once 'includes/profesor_header.php';
         color: #2e7d32;
         font-size: 14px;
     }
+    
     .info-box i {
         margin-right: 8px;
     }
+    
     .tema-item .tema-descripcion-label {
         font-size: 12px;
         color: #999;
         display: block;
         margin-bottom: 3px;
     }
+    
+    .help-text {
+        color: #999;
+        display: block;
+        margin-top: 5px;
+        font-size: 12px;
+    }
+    
+    .help-text i {
+        margin-right: 5px;
+    }
+
+    /* ===== SEPARADOR ===== */
+    .divider {
+        margin: 25px 0;
+        border: none;
+        border-top: 2px solid #f0f0f0;
+    }
+
+    /* ===== RESPONSIVE - TABLETS ===== */
+    @media (max-width: 1024px) {
+        .form-container {
+            padding: 25px;
+            max-width: 700px;
+        }
+        
+        .page-title {
+            font-size: 22px;
+        }
+    }
+
+    /* ===== RESPONSIVE - MÓVILES Y TABLETS PEQUEÑAS ===== */
+    @media (max-width: 820px) {
+        .form-container {
+            padding: 20px;
+            max-width: 100%;
+            margin: 0 10px;
+        }
+        
+        .page-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            font-size: 13px;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            font-size: 13px;
+            padding: 8px;
+        }
+        
+        .temas-container {
+            max-height: 350px;
+            padding: 12px;
+        }
+        
+        .tema-item {
+            padding: 10px;
+        }
+        
+        .tema-item input,
+        .tema-item textarea {
+            font-size: 13px;
+            padding: 6px 10px;
+        }
+        
+        .btn-submit {
+            font-size: 15px;
+            padding: 10px 25px;
+        }
+        
+        .btn-cancel {
+            font-size: 15px;
+            padding: 10px 25px;
+        }
+        
+        .btn-add-tema {
+            font-size: 13px;
+            padding: 8px 16px;
+        }
+        
+        .info-box {
+            font-size: 13px;
+            padding: 10px 12px;
+        }
+    }
+
+    /* ===== RESPONSIVE - MÓVILES PEQUEÑOS ===== */
+    @media (max-width: 480px) {
+        .form-container {
+            padding: 15px;
+            margin: 0 5px;
+            border-radius: 8px;
+        }
+        
+        .page-title {
+            font-size: 17px;
+        }
+        
+        .page-title i {
+            font-size: 16px;
+        }
+        
+        .form-group {
+            margin-bottom: 12px;
+        }
+        
+        .form-group label {
+            font-size: 12px;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            font-size: 12px;
+            padding: 6px 8px;
+            border-radius: 6px;
+        }
+        
+        .form-group textarea {
+            min-height: 60px;
+        }
+        
+        .temas-container {
+            max-height: 300px;
+            padding: 10px;
+        }
+        
+        .tema-item {
+            padding: 8px;
+            border-radius: 6px;
+        }
+        
+        .tema-item .tema-header .tema-numero {
+            font-size: 12px;
+        }
+        
+        .tema-item input,
+        .tema-item textarea {
+            font-size: 12px;
+            padding: 5px 8px;
+            margin-bottom: 5px;
+        }
+        
+        .tema-item textarea {
+            min-height: 40px;
+        }
+        
+        .tema-item .btn-remove-tema {
+            font-size: 11px;
+            padding: 3px 10px;
+        }
+        
+        .btn-submit {
+            font-size: 14px;
+            padding: 8px 20px;
+        }
+        
+        .btn-cancel {
+            font-size: 14px;
+            padding: 8px 20px;
+        }
+        
+        .btn-add-tema {
+            font-size: 12px;
+            padding: 6px 14px;
+        }
+        
+        .info-box {
+            font-size: 12px;
+            padding: 8px 10px;
+        }
+        
+        .help-text {
+            font-size: 11px;
+        }
+        
+        .divider {
+            margin: 15px 0;
+        }
+        
+        .alert {
+            padding: 10px 14px;
+            font-size: 13px;
+            border-radius: 8px;
+        }
+        
+        .alert i {
+            font-size: 16px;
+        }
+    }
+
+    /* ===== RESPONSIVE - MÓVILES MUY PEQUEÑOS ===== */
+    @media (max-width: 360px) {
+        .form-container {
+            padding: 10px;
+        }
+        
+        .page-title {
+            font-size: 15px;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            font-size: 11px;
+            padding: 5px 6px;
+        }
+        
+        .tema-item input,
+        .tema-item textarea {
+            font-size: 11px;
+            padding: 4px 6px;
+        }
+        
+        .btn-submit {
+            font-size: 13px;
+            padding: 6px 16px;
+        }
+        
+        .btn-cancel {
+            font-size: 13px;
+            padding: 6px 16px;
+        }
+        
+        .temas-container {
+            max-height: 250px;
+            padding: 8px;
+        }
+    }
+
+    /* ===== SOPORTE PARA ORIENTACIÓN HORIZONTAL ===== */
+    @media (max-height: 600px) and (orientation: landscape) {
+        .form-container {
+            max-width: 600px;
+        }
+        
+        .temas-container {
+            max-height: 200px;
+        }
+        
+        .form-group {
+            margin-bottom: 10px;
+        }
+        
+        .form-group textarea {
+            min-height: 50px;
+        }
+        
+        .tema-item {
+            padding: 6px 10px;
+        }
+        
+        .tema-item textarea {
+            min-height: 30px;
+        }
+        
+        .page-title {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+    }
+
+    /* ===== MEJORAS DE ACCESIBILIDAD ===== */
+    @media (prefers-reduced-motion: reduce) {
+        * {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+        }
+    }
+
+    /* ===== SCROLL SUAVE ===== */
+    html {
+        scroll-behavior: smooth;
+    }
+
+    /* ===== SELECTION ===== */
+    ::selection {
+        background: #9b59b6;
+        color: white;
+    }
+
+    /* ===== UTILITY ===== */
+    .hidden {
+        display: none !important;
+    }
 </style>
 
-<h3><i class="fas fa-plus-circle"></i> Crear Nueva Materia</h3>
+<h3 class="page-title"><i class="fas fa-plus-circle"></i> Crear Nueva Materia</h3>
 
 <div class="form-container">
     <?php if (isset($_SESSION['error'])): ?>
@@ -275,7 +701,7 @@ require_once 'includes/profesor_header.php';
             </select>
         </div>
 
-        <hr style="margin: 25px 0; border-color: #e0e0e0;">
+        <hr class="divider">
 
         <!-- Temas de la Materia -->
         <div class="form-group">
@@ -305,9 +731,9 @@ require_once 'includes/profesor_header.php';
                     <i class="fas fa-plus"></i> Agregar Tema
                 </button>
             </div>
-            <small style="color: #999; display: block; margin-top: 5px;">
+            <span class="help-text">
                 <i class="fas fa-info-circle"></i> Puedes agregar cuantos temas necesites. El orden se establecerá automáticamente.
-            </small>
+            </span>
         </div>
         
         <button type="submit" class="btn-submit" onclick="return validarTemas()">
@@ -341,6 +767,8 @@ function agregarTema() {
     `;
     lista.appendChild(nuevoTema);
     actualizarBotonesEliminar();
+    // Scroll al nuevo tema
+    nuevoTema.scrollIntoView({ behavior: 'smooth', block: 'center' });
 }
 
 function eliminarTema(id) {
@@ -402,8 +830,22 @@ function validarTemas() {
     return true;
 }
 
+// Autoajustar altura de textareas
+document.addEventListener('input', function(e) {
+    if (e.target.tagName === 'TEXTAREA') {
+        e.target.style.height = 'auto';
+        e.target.style.height = e.target.scrollHeight + 'px';
+    }
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     actualizarBotonesEliminar();
+    
+    // Autoajuste inicial para textareas
+    document.querySelectorAll('textarea').forEach(function(ta) {
+        ta.style.height = 'auto';
+        ta.style.height = ta.scrollHeight + 'px';
+    });
 });
 </script>
 

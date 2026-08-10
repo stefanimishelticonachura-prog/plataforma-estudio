@@ -16,6 +16,54 @@ if (!isset($_SESSION['usuario_id']) || $_SESSION['usuario_rol_id'] != 2) {
 $usuario_id = $_SESSION['usuario_id'];
 
 // =============================================
+// FUNCIÓN PARA ACTUALIZAR PROGRESO
+// =============================================
+function actualizarProgresoEvaluacion($pdo, $usuario_id, $evaluacion_id) {
+    try {
+        // Obtener el tema de la evaluación
+        $stmt = $pdo->prepare("
+            SELECT id_tema FROM Evaluaciones WHERE id = ?
+        ");
+        $stmt->execute([$evaluacion_id]);
+        $evaluacion = $stmt->fetch();
+        
+        if (!$evaluacion) {
+            return false;
+        }
+        
+        $tema_id = $evaluacion['id_tema'];
+        
+        // Verificar si existe registro de progreso
+        $stmt = $pdo->prepare("
+            SELECT id FROM Progreso WHERE id_usuario = ? AND id_tema = ?
+        ");
+        $stmt->execute([$usuario_id, $tema_id]);
+        $existe = $stmt->fetch();
+        
+        if ($existe) {
+            // Actualizar existente
+            $stmt = $pdo->prepare("
+                UPDATE Progreso 
+                SET evaluacion_completada = 1, fecha_actualizacion = NOW()
+                WHERE id_usuario = ? AND id_tema = ?
+            ");
+            $stmt->execute([$usuario_id, $tema_id]);
+        } else {
+            // Insertar nuevo (con video_visto y material_revisado en 0 por defecto)
+            $stmt = $pdo->prepare("
+                INSERT INTO Progreso (id_usuario, id_tema, video_visto, material_revisado, evaluacion_completada)
+                VALUES (?, ?, 0, 0, 1)
+            ");
+            $stmt->execute([$usuario_id, $tema_id]);
+        }
+        
+        return true;
+    } catch (PDOException $e) {
+        return false;
+    }
+}
+
+// =============================================
 // PROCESAR CORRECCIÓN POR PREGUNTA (AJAX)
 // =============================================
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'corregir_pregunta') {
@@ -29,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         $stmt->execute([$puntaje_obtenido, $id_respuesta]);
         
         $stmt = $pdo->prepare("
-            SELECT r.id, SUM(COALESCE(re.puntaje_obtenido, 0)) as total
+            SELECT r.id, r.id_usuario, r.id_evaluacion, SUM(COALESCE(re.puntaje_obtenido, 0)) as total
             FROM ResultadosEvaluacion r
             JOIN RespuestasEvaluacion re ON r.id = re.id_resultado
             WHERE r.id = (
@@ -43,6 +91,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
         if ($resultado) {
             $stmt = $pdo->prepare("UPDATE ResultadosEvaluacion SET puntaje_obtenido = ?, estado = 'corregido', fecha_correccion = NOW() WHERE id = ?");
             $stmt->execute([$resultado['total'], $resultado['id']]);
+            
+            // =============================================
+            // ACTUALIZAR PROGRESO - evaluacion_completada = 1
+            // =============================================
+            actualizarProgresoEvaluacion($pdo, $resultado['id_usuario'], $resultado['id_evaluacion']);
         }
         
         $pdo->commit();
@@ -71,6 +124,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     try {
         $pdo->beginTransaction();
         $total_general = 0;
+        $usuario_id_resultado = 0;
+        $evaluacion_id_resultado = 0;
         
         foreach ($respuestas as $id_respuesta => $puntaje) {
             $puntaje = floatval($puntaje);
@@ -79,9 +134,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
             $total_general += $puntaje;
         }
         
+        // Obtener usuario y evaluación del resultado
+        $stmt = $pdo->prepare("SELECT id_usuario, id_evaluacion FROM ResultadosEvaluacion WHERE id = ?");
+        $stmt->execute([$resultado_id]);
+        $info_resultado = $stmt->fetch();
+        if ($info_resultado) {
+            $usuario_id_resultado = $info_resultado['id_usuario'];
+            $evaluacion_id_resultado = $info_resultado['id_evaluacion'];
+        }
+        
         // Actualizar resultado general
         $stmt = $pdo->prepare("UPDATE ResultadosEvaluacion SET puntaje_obtenido = ?, estado = 'corregido', fecha_correccion = NOW() WHERE id = ?");
         $stmt->execute([$total_general, $resultado_id]);
+        
+        // =============================================
+        // ACTUALIZAR PROGRESO - evaluacion_completada = 1
+        // =============================================
+        if ($usuario_id_resultado && $evaluacion_id_resultado) {
+            actualizarProgresoEvaluacion($pdo, $usuario_id_resultado, $evaluacion_id_resultado);
+        }
         
         $pdo->commit();
         
@@ -260,8 +331,54 @@ require_once 'includes/profesor_header.php';
     .gestion-container {
         max-width: 1200px;
         margin: 0 auto;
+        padding: 20px;
+        width: 100%;
     }
     
+    .gestion-container h3 {
+        font-size: 24px;
+        color: #2c3e50;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .gestion-container h3 i {
+        color: #9b59b6;
+    }
+
+    .alert {
+        padding: 15px 20px;
+        border-radius: 10px;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        animation: slideDown 0.4s ease;
+    }
+
+    @keyframes slideDown {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .alert i {
+        font-size: 20px;
+    }
+
+    .alert-error {
+        background-color: #fee;
+        color: #c33;
+        border: 1px solid #fcc;
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        color: #155724;
+        border: 1px solid #c3e6cb;
+    }
+
     .materias-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -277,6 +394,7 @@ require_once 'includes/profesor_header.php';
         transition: transform 0.2s, box-shadow 0.2s;
         border-top: 4px solid #2ecc71;
     }
+    
     .materia-card:hover {
         transform: translateY(-3px);
         box-shadow: 0 5px 25px rgba(0,0,0,0.12);
@@ -289,12 +407,23 @@ require_once 'includes/profesor_header.php';
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 10px;
     }
+    
     .materia-header h4 {
         margin: 0;
         color: #2c3e50;
         font-size: 18px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
+    
+    .materia-header h4 i {
+        color: #2ecc71;
+    }
+    
     .materia-header .badge-materia {
         background: #2ecc71;
         color: white;
@@ -302,6 +431,7 @@ require_once 'includes/profesor_header.php';
         border-radius: 12px;
         font-size: 12px;
     }
+    
     .materia-body {
         padding: 15px 20px;
     }
@@ -311,9 +441,11 @@ require_once 'includes/profesor_header.php';
         border-left: 3px solid #2ecc71;
         padding-left: 12px;
     }
+    
     .evaluacion-item:last-child {
         margin-bottom: 0;
     }
+    
     .evaluacion-item .eval-header {
         font-weight: 600;
         color: #2c3e50;
@@ -323,7 +455,9 @@ require_once 'includes/profesor_header.php';
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
+        gap: 8px;
     }
+    
     .evaluacion-item .eval-header .badge-eval {
         background: #e8f5e9;
         color: #2e7d32;
@@ -343,43 +477,59 @@ require_once 'includes/profesor_header.php';
         justify-content: space-between;
         align-items: center;
         flex-wrap: wrap;
+        gap: 10px;
         transition: all 0.2s;
     }
+    
     .estudiante-card:hover {
         background: #f0f0f0;
     }
+    
     .estudiante-card .info {
         display: flex;
         align-items: center;
         gap: 12px;
         flex-wrap: wrap;
+        flex: 1;
     }
+    
     .estudiante-card .info .nombre {
         font-weight: 500;
         color: #2c3e50;
         font-size: 14px;
     }
+    
     .estudiante-card .info .correo {
         font-size: 12px;
         color: #999;
     }
+    
     .estudiante-card .estado {
         font-size: 13px;
         font-weight: 500;
         padding: 3px 12px;
         border-radius: 12px;
     }
+    
     .estudiante-card .estado.no-realizado {
         background: #e9ecef;
         color: #6c757d;
     }
+    
     .estudiante-card .estado.pendiente {
         background: #fff3cd;
         color: #856404;
     }
+    
     .estudiante-card .estado.corregido {
         background: #d4edda;
         color: #155724;
+    }
+    
+    .estudiante-card .puntaje-mostrado {
+        font-size: 13px;
+        font-weight: 600;
+        color: #2ecc71;
     }
     
     .btn-corregir-estudiante {
@@ -387,17 +537,25 @@ require_once 'includes/profesor_header.php';
         color: white;
         border: none;
         border-radius: 5px;
-        padding: 5px 15px;
+        padding: 6px 15px;
         cursor: pointer;
         font-size: 12px;
-        transition: background 0.3s;
+        transition: background 0.3s, transform 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        white-space: nowrap;
     }
+    
     .btn-corregir-estudiante:hover {
         background: #2980b9;
+        transform: scale(1.02);
     }
+    
     .btn-corregir-estudiante:disabled {
         background: #95a5a6;
         cursor: not-allowed;
+        transform: none;
     }
     
     .sin-estudiantes {
@@ -407,7 +565,6 @@ require_once 'includes/profesor_header.php';
         padding: 8px 0;
     }
     
-    /* MODAL DE CORRECCIÓN */
     .modal-overlay {
         display: none;
         position: fixed;
@@ -420,10 +577,13 @@ require_once 'includes/profesor_header.php';
         justify-content: center;
         align-items: center;
         padding: 20px;
+        backdrop-filter: blur(4px);
     }
+    
     .modal-overlay.show {
         display: flex;
     }
+    
     .modal-content {
         background: white;
         border-radius: 15px;
@@ -433,11 +593,14 @@ require_once 'includes/profesor_header.php';
         overflow-y: auto;
         padding: 30px;
         animation: modalIn 0.3s ease;
+        position: relative;
     }
+    
     @keyframes modalIn {
-        from { transform: translateY(-30px); opacity: 0; }
-        to { transform: translateY(0); opacity: 1; }
+        from { transform: translateY(-30px) scale(0.95); opacity: 0; }
+        to { transform: translateY(0) scale(1); opacity: 1; }
     }
+    
     .modal-content .modal-header {
         display: flex;
         justify-content: space-between;
@@ -450,11 +613,20 @@ require_once 'includes/profesor_header.php';
         background: white;
         z-index: 10;
     }
+    
     .modal-content .modal-header h3 {
         margin: 0;
         color: #2c3e50;
         font-size: 20px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
     }
+    
+    .modal-content .modal-header h3 i {
+        color: #9b59b6;
+    }
+    
     .modal-content .modal-header .btn-close-modal {
         background: none;
         border: none;
@@ -463,10 +635,13 @@ require_once 'includes/profesor_header.php';
         color: #999;
         transition: color 0.3s;
         line-height: 1;
+        padding: 0 10px;
     }
+    
     .modal-content .modal-header .btn-close-modal:hover {
         color: #333;
     }
+    
     .modal-content .estudiante-info-modal {
         background: #f8f9fa;
         padding: 15px;
@@ -474,15 +649,18 @@ require_once 'includes/profesor_header.php';
         margin-bottom: 20px;
         border-left: 4px solid #3498db;
     }
+    
     .modal-content .estudiante-info-modal .nombre {
         font-weight: 600;
         font-size: 16px;
         color: #2c3e50;
     }
+    
     .modal-content .estudiante-info-modal .correo {
         color: #999;
         font-size: 13px;
     }
+    
     .modal-content .pregunta-corregir {
         background: #f8f9fa;
         border-radius: 8px;
@@ -490,11 +668,14 @@ require_once 'includes/profesor_header.php';
         margin-bottom: 12px;
         border-left: 3px solid #3498db;
     }
+    
     .modal-content .pregunta-corregir .pregunta-texto {
         font-weight: 500;
         color: #2c3e50;
         margin-bottom: 8px;
+        font-size: 14px;
     }
+    
     .modal-content .pregunta-corregir .pregunta-texto .tipo-badge {
         display: inline-block;
         padding: 1px 8px;
@@ -503,6 +684,7 @@ require_once 'includes/profesor_header.php';
         font-weight: 500;
         margin-right: 5px;
     }
+    
     .modal-content .pregunta-corregir .pregunta-texto .tipo-badge.opcion_unica { background: #e3f2fd; color: #1976d2; }
     .modal-content .pregunta-corregir .pregunta-texto .tipo-badge.opcion_multiple { background: #f3e5f5; color: #7b1fa2; }
     .modal-content .pregunta-corregir .pregunta-texto .tipo-badge.verdadero_falso { background: #fff3e0; color: #e65100; }
@@ -516,11 +698,14 @@ require_once 'includes/profesor_header.php';
         border: 1px solid #e0e0e0;
         margin: 5px 0 8px 0;
         font-size: 14px;
+        word-wrap: break-word;
     }
+    
     .modal-content .pregunta-corregir .respuesta-estudiante.sin-respuesta {
         color: #999;
         font-style: italic;
     }
+    
     .modal-content .pregunta-corregir .correccion-row {
         display: flex;
         gap: 10px;
@@ -528,30 +713,37 @@ require_once 'includes/profesor_header.php';
         flex-wrap: wrap;
         margin-top: 8px;
     }
+    
     .modal-content .pregunta-corregir .correccion-row label {
         font-size: 13px;
         color: #555;
         font-weight: 500;
     }
+    
     .modal-content .pregunta-corregir .correccion-row input {
         padding: 5px 10px;
         border: 2px solid #e0e0e0;
         border-radius: 5px;
         width: 80px;
         font-size: 13px;
+        transition: border-color 0.3s;
     }
+    
     .modal-content .pregunta-corregir .correccion-row input:focus {
         outline: none;
         border-color: #2ecc71;
     }
+    
     .modal-content .pregunta-corregir .correccion-row .puntaje-actual {
         font-size: 13px;
         color: #999;
     }
+    
     .modal-content .pregunta-corregir .correccion-row .puntaje-actual.corregido {
         color: #2ecc71;
         font-weight: 600;
     }
+    
     .modal-content .pregunta-corregir .correccion-row .puntaje-actual.pendiente {
         color: #f39c12;
     }
@@ -566,9 +758,11 @@ require_once 'includes/profesor_header.php';
         font-weight: 600;
         border: 2px solid #e0e0e0;
     }
+    
     .modal-content .total-container .total-puntaje {
         color: #2ecc71;
     }
+    
     .modal-content .total-container .total-pendiente {
         color: #f39c12;
     }
@@ -584,6 +778,7 @@ require_once 'includes/profesor_header.php';
         background: white;
         padding-bottom: 5px;
     }
+    
     .modal-content .acciones-modal .btn-cerrar-modal {
         background: #95a5a6;
         color: white;
@@ -595,9 +790,11 @@ require_once 'includes/profesor_header.php';
         transition: background 0.3s;
         flex: 1;
     }
+    
     .modal-content .acciones-modal .btn-cerrar-modal:hover {
         background: #7f8c8d;
     }
+    
     .modal-content .acciones-modal .btn-calificar-todo {
         background: #2ecc71;
         color: white;
@@ -606,37 +803,187 @@ require_once 'includes/profesor_header.php';
         padding: 12px 25px;
         cursor: pointer;
         font-weight: 600;
-        transition: background 0.3s;
+        transition: background 0.3s, transform 0.2s;
         flex: 2;
         font-size: 16px;
     }
+    
     .modal-content .acciones-modal .btn-calificar-todo:hover {
         background: #27ae60;
+        transform: scale(1.02);
     }
+    
     .modal-content .acciones-modal .btn-calificar-todo:disabled {
         background: #95a5a6;
         cursor: not-allowed;
+        transform: none;
     }
     
+    .btn-crear-evaluacion {
+        background: #9b59b6;
+        color: white;
+        padding: 10px 25px;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-block;
+        margin-top: 10px;
+        transition: all 0.3s;
+        border: none;
+        font-size: 14px;
+        font-weight: 500;
+    }
+    
+    .btn-crear-evaluacion:hover {
+        background: #8e44ad;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(155, 89, 182, 0.4);
+    }
+    
+    .empty-state {
+        text-align: center;
+        padding: 60px 20px;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+    
+    .empty-state i {
+        font-size: 64px;
+        color: #ccc;
+        display: block;
+        margin-bottom: 20px;
+    }
+    
+    .empty-state h4 {
+        color: #666;
+        margin-bottom: 10px;
+        font-size: 20px;
+    }
+    
+    .empty-state p {
+        color: #999;
+        font-size: 14px;
+    }
+
     @media (max-width: 768px) {
+        .gestion-container {
+            padding: 12px;
+        }
+        
+        .gestion-container h3 {
+            font-size: 20px;
+        }
+        
         .materias-grid {
             grid-template-columns: 1fr;
+            gap: 15px;
         }
+        
+        .materia-header h4 {
+            font-size: 16px;
+        }
+        
         .estudiante-card {
             flex-direction: column;
             align-items: stretch;
             gap: 8px;
         }
+        
         .estudiante-card .info {
             flex-direction: column;
             align-items: flex-start;
+            gap: 4px;
         }
+        
+        .btn-corregir-estudiante {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            padding: 20px;
+        }
+        
         .modal-content .pregunta-corregir .correccion-row {
             flex-direction: column;
             align-items: stretch;
         }
+        
+        .modal-content .pregunta-corregir .correccion-row input {
+            width: 100%;
+        }
+        
         .modal-content .acciones-modal {
             flex-direction: column;
+        }
+        
+        .modal-content .acciones-modal .btn-calificar-todo,
+        .modal-content .acciones-modal .btn-cerrar-modal {
+            width: 100%;
+            text-align: center;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .gestion-container {
+            padding: 8px;
+        }
+        
+        .gestion-container h3 {
+            font-size: 17px;
+        }
+        
+        .materia-header h4 {
+            font-size: 14px;
+        }
+        
+        .estudiante-card .info .nombre {
+            font-size: 12px;
+        }
+        
+        .estudiante-card .estado {
+            font-size: 11px;
+        }
+        
+        .btn-corregir-estudiante {
+            font-size: 11px;
+            padding: 6px;
+        }
+        
+        .modal-content {
+            padding: 15px;
+        }
+        
+        .modal-content .modal-header h3 {
+            font-size: 15px;
+        }
+        
+        .modal-content .pregunta-corregir {
+            padding: 10px;
+        }
+        
+        .modal-content .pregunta-corregir .pregunta-texto {
+            font-size: 12px;
+        }
+        
+        .modal-content .pregunta-corregir .respuesta-estudiante {
+            font-size: 12px;
+            padding: 6px 10px;
+        }
+        
+        .modal-content .total-container {
+            font-size: 14px;
+            padding: 10px;
+        }
+        
+        .modal-content .acciones-modal .btn-calificar-todo {
+            font-size: 14px;
+            padding: 10px;
+        }
+        
+        .modal-content .acciones-modal .btn-cerrar-modal {
+            font-size: 13px;
+            padding: 10px;
         }
     }
 </style>
@@ -659,11 +1006,11 @@ require_once 'includes/profesor_header.php';
     <?php endif; ?>
 
     <?php if (empty($evaluaciones_por_materia)): ?>
-        <div style="text-align: center; padding: 60px 20px; background: white; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
-            <i class="fas fa-check-double" style="font-size: 64px; color: #ccc; display: block; margin-bottom: 20px;"></i>
-            <h4 style="color: #666; margin-bottom: 10px;">No hay evaluaciones para corregir</h4>
+        <div class="empty-state">
+            <i class="fas fa-check-double"></i>
+            <h4>No hay evaluaciones para corregir</h4>
             <p style="color: #999; font-size: 14px;">Crea evaluaciones en la sección <strong>"Gestión de Evaluaciones"</strong></p>
-            <a href="crear-evaluacion.php" class="btn" style="background: #9b59b6; color: white; padding: 10px 25px; border-radius: 8px; text-decoration: none; display: inline-block; margin-top: 10px;">
+            <a href="crear-evaluacion.php" class="btn-crear-evaluacion">
                 <i class="fas fa-plus-circle"></i> Crear Evaluación
             </a>
         </div>
@@ -672,7 +1019,7 @@ require_once 'includes/profesor_header.php';
             <?php foreach ($evaluaciones_por_materia as $materia_id => $materia): ?>
                 <div class="materia-card">
                     <div class="materia-header">
-                        <h4><i class="fas fa-book" style="color: #2ecc71; margin-right: 8px;"></i><?php echo htmlspecialchars($materia['nombre']); ?></h4>
+                        <h4><i class="fas fa-book"></i><?php echo htmlspecialchars($materia['nombre']); ?></h4>
                         <span class="badge-materia">
                             <?php echo count($materia['evaluaciones']); ?> evaluaciones
                         </span>
@@ -738,7 +1085,7 @@ require_once 'includes/profesor_header.php';
                                                     <?php echo $estado_texto; ?>
                                                 </span>
                                                 <?php if ($est['realizo'] && $est['resultado']['estado'] == 'corregido'): ?>
-                                                    <span style="font-size: 13px; font-weight: 600; color: #2ecc71;">
+                                                    <span class="puntaje-mostrado">
                                                         <?php echo number_format($est['resultado']['total'], 2); ?>/<?php echo $info['puntaje_maximo']; ?>
                                                     </span>
                                                 <?php endif; ?>
