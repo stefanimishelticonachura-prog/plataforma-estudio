@@ -1,7 +1,7 @@
 <?php
 // ============================================================
 // RECUPERAR CONTRASEÑA - MEDACADEMY
-// Archivo: recuperacion.php (RAÍZ)
+// Archivo: recuperacion.php
 // ============================================================
 
 // ========== CONFIGURACIÓN ==========
@@ -12,21 +12,55 @@ $url_login = "https://plataforma-estudio-9eot.onrender.com/";
 // ========== DETECTAR ENTORNO ==========
 $is_production = (getenv('ENVIRONMENT') === 'production' || getenv('RENDER'));
 
-// ========== CARGAR PHPMailer (RUTA CORRECTA) ==========
-// Como recuperacion.php está en la raíz, PHPMailer está en ./PHPMailer/
-require_once __DIR__ . '/PHPMailer/src/PHPMailer.php';
-require_once __DIR__ . '/PHPMailer/src/SMTP.php';
-require_once __DIR__ . '/PHPMailer/src/Exception.php';
+// ========== BUSCAR PHPMailer AUTOMÁTICAMENTE ==========
+$phpmailer_paths = [
+    __DIR__ . '/PHPMailer/src/PHPMailer.php',      // ./PHPMailer/src/
+    __DIR__ . '/PHPMailer/src/PHPMailer.php',      // mismo
+    __DIR__ . '/../PHPMailer/src/PHPMailer.php',   // ../PHPMailer/src/
+    __DIR__ . '/../../PHPMailer/src/PHPMailer.php', // ../../PHPMailer/src/
+];
+
+$found = false;
+foreach ($phpmailer_paths as $path) {
+    if (file_exists($path)) {
+        require_once $path;
+        $phpmailer_dir = dirname($path);
+        require_once $phpmailer_dir . '/SMTP.php';
+        require_once $phpmailer_dir . '/Exception.php';
+        $found = true;
+        break;
+    }
+}
+
+if (!$found) {
+    die('❌ Error: No se encontró PHPMailer. Asegúrate de que la carpeta PHPMailer esté en la raíz del proyecto.');
+}
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
 
-// ========== CONEXIÓN A LA BASE DE DATOS (RUTA CORRECTA) ==========
-// Como recuperacion.php está en la raíz, config está en ./config/
-require_once __DIR__ . '/config/database.php';
+// ========== BUSCAR database.php AUTOMÁTICAMENTE ==========
+$db_paths = [
+    __DIR__ . '/config/database.php',      // ./config/
+    __DIR__ . '/../config/database.php',   // ../config/
+    __DIR__ . '/../../config/database.php', // ../../config/
+];
 
-// Verificar que la conexión $pdo existe
+$db_found = false;
+foreach ($db_paths as $path) {
+    if (file_exists($path)) {
+        require_once $path;
+        $db_found = true;
+        break;
+    }
+}
+
+if (!$db_found) {
+    die('❌ Error: No se encontró database.php');
+}
+
+// Verificar conexión
 if (!isset($pdo)) {
     die('❌ Error: No se pudo establecer conexión a la base de datos');
 }
@@ -109,7 +143,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </head>
                     <body style='font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; background-color: #F0F4F8; margin: 0; padding: 40px 20px;'>
                         <div style='max-width: 560px; margin: 0 auto; background: #FFFFFF; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);'>
-                            <!-- Header -->
                             <div style='background: linear-gradient(135deg, #0A8E8C 0%, #06706E 100%); padding: 35px 40px 30px; text-align: center;'>
                                 <h1 style='color: #FFFFFF; font-size: 28px; font-weight: 800; margin: 0; letter-spacing: -0.5px;'>
                                     MEDACADEMY
@@ -117,12 +150,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </h1>
                             </div>
                             
-                            <!-- Content -->
                             <div style='padding: 35px 40px 30px;'>
                                 <h2 style='color: #1A202C; font-size: 22px; margin: 0 0 8px 0;'>¡Hola " . htmlspecialchars($nombre_completo) . "!</h2>
                                 <p style='color: #4A5568; font-size: 15px; margin: 0 0 25px 0; line-height: 1.6;'>Has solicitado recuperar tu contraseña en <strong>MEDACADEMY</strong>. Tu nueva contraseña temporal es:</p>
                                 
-                                <!-- Password Box -->
                                 <div style='background: #F7FAFC; border: 2px solid #E2E8F0; border-radius: 12px; padding: 20px; text-align: center; margin-bottom: 25px;'>
                                     <p style='margin: 0 0 8px 0; color: #A0AEC0; font-size: 13px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;'>🔑 Nueva Contraseña</p>
                                     <div style='font-size: 32px; font-weight: 700; color: #0A8E8C; letter-spacing: 4px; font-family: 'Courier New', monospace; background: #E8F5F4; padding: 12px; border-radius: 8px; display: inline-block; min-width: 200px;'>
@@ -130,14 +161,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </div>
                                 </div>
                                 
-                                <!-- Warning Box -->
                                 <div style='background: #FEF3C7; border-left: 4px solid #F59E0B; padding: 15px 18px; border-radius: 8px; margin-bottom: 28px;'>
                                     <p style='margin: 0; font-size: 13px; color: #92400E; line-height: 1.5;'>
                                         <strong>⚠️ Importante:</strong> Esta contraseña es temporal. Te recomendamos cambiarla después de iniciar sesión por seguridad.
                                     </p>
                                 </div>
                                 
-                                <!-- Button -->
                                 <div style='text-align: center; margin: 30px 0 25px;'>
                                     <a href='" . htmlspecialchars($url_login) . "' 
                                        style='display: inline-block; background: linear-gradient(135deg, #0A8E8C 0%, #06706E 100%); color: #FFFFFF; padding: 14px 45px; text-decoration: none; border-radius: 12px; font-weight: 700; font-size: 16px; transition: all 0.3s; box-shadow: 0 8px 25px rgba(10, 142, 140, 0.3);'>
@@ -175,6 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 ?>
 
+<!-- EL HTML (igual que antes) -->
 <!DOCTYPE html>
 <html lang="es" data-theme="light">
 <head>
@@ -1127,7 +1157,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         emailInput.value = this.textContent.trim();
                         emailInput.focus();
                         
-                        // Disparar evento input para ocultar alerta
                         const event = new Event('input', { bubbles: true });
                         emailInput.dispatchEvent(event);
                     }
@@ -1169,7 +1198,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
             });
 
-            // Restaurar si hay error
             <?php if ($tipo_mensaje === 'error'): ?>
                 isSubmitting = false;
                 submitBtn.disabled = false;
