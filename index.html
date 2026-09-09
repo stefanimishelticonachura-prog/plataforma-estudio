@@ -9,15 +9,14 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="css/index.css" />
     <style>
-
-        /* ===== FAQ ===== */
+/* ===== FAQ ===== */
         .faq-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 28px;
         }
         .faq-card {
-            background: var(--card-bg);
+            background: #ffffff; /* Fondo blanco sólido */
             padding: 26px 24px;
             border-radius: var(--radius);
             box-shadow: var(--shadow);
@@ -76,6 +75,7 @@
             }
             .faq-card {
                 padding: 22px 18px;
+                background: #ffffff; /* Fondo blanco en móvil también */
             }
         }
 
@@ -92,6 +92,9 @@
             }
             .stats-grid {
                 grid-template-columns: 1fr 1fr;
+            }
+            .faq-card {
+                background: #ffffff; /* Fondo blanco en móvil pequeño */
             }
         }
     </style>
