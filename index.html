@@ -2,12 +2,99 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
     <title>MEDACADEMY Bolivia · El Futuro de la Salud está en tus Manos</title>
     <!-- Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="css/index.css" />
+    <style>
+
+        /* ===== FAQ ===== */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 28px;
+        }
+        .faq-card {
+            background: var(--card-bg);
+            padding: 26px 24px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            text-align: left;
+        }
+        .faq-card h3 {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .faq-card h3 i {
+            color: var(--primary);
+        }
+        .faq-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+        .faq-card strong {
+            color: var(--text-primary);
+        }
+
+        
+    
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .navbar .container {
+                flex-direction: column;
+                align-items: stretch;
+                gap: 12px;
+            }
+            .logo {
+                justify-content: center;
+            }
+            .nav-links {
+                justify-content: center;
+                gap: 12px;
+            }
+            .nav-links a {
+                font-size: 0.8rem;
+            }
+            .hero h1 {
+                font-size: 2rem;
+            }
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            /* --- FAQ: mobile grid single column, cards style --- */
+            .faq-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .faq-card {
+                padding: 22px 18px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero h1 {
+                font-size: 1.7rem;
+            }
+            .btn-primary {
+                padding: 12px 24px;
+                font-size: 0.9rem;
+            }
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -37,7 +124,6 @@
 
             <div class="carousel-container">
                 <div class="carousel-slides">
-                    <!-- Slide 1 - Soberanía Sanitaria -->
                     <div class="carousel-slide active">
                         <div class="slide-image">
                             <picture>
@@ -48,8 +134,6 @@
                             </picture>
                         </div>
                     </div>
-
-                    <!-- Slide 2 - Medicina de Precisión -->
                     <div class="carousel-slide">
                         <div class="slide-image">
                             <picture>
@@ -60,8 +144,6 @@
                             </picture>
                         </div>
                     </div>
-
-                    <!-- Slide 3 - Impactas Vidas -->
                     <div class="carousel-slide">
                         <div class="slide-image">
                             <picture>
@@ -72,8 +154,6 @@
                             </picture>
                         </div>
                     </div>
-
-                    <!-- Slide 4 - Demanda Creciente -->
                     <div class="carousel-slide">
                         <div class="slide-image">
                             <picture>
@@ -86,21 +166,17 @@
                     </div>
                 </div>
 
-                <!-- Botones de navegación -->
                 <button class="carousel-btn prev-btn" aria-label="Anterior">
                     <i class="fas fa-chevron-left"></i>
                 </button>
                 <button class="carousel-btn next-btn" aria-label="Siguiente">
                     <i class="fas fa-chevron-right"></i>
                 </button>
-
-                <!-- Indicadores -->
                 <div class="carousel-indicators">
                     <span class="indicator active" data-slide="0"></span>
                     <span class="indicator" data-slide="1"></span>
                     <span class="indicator" data-slide="2"></span>
                     <span class="indicator" data-slide="3"></span>
-                    <span class="indicator" data-slide="4"></span>
                 </div>
             </div>
         </div>
@@ -121,23 +197,11 @@
             <h2 class="section-title">La realidad de la carrera de medicina</h2>
             <p class="section-subtitle">Datos que muestran por qué tu formación es clave para tu futuro</p>
             <div class="stats-grid">
-                <div class="stat-item">
-                    <div class="label">Aproximadamente el 70% al 80% de los estudiantes carecen de metodologías de aprendizaje eficientes y estructuradas durante su formación</div>
-                </div>
-                <div class="stat-item">
-                    <div class="label">La universidad requiere un alto grado de aprendizaje autónomo y gestión independiente del tiempo</div>
-                </div>
-                <div class="stat-item">
-                    <div class="label">Entre el 30% y el 50% de los estudiantes ingresan al internado con vacíos formativos importantes</div>
-                </div>
-                <div class="stat-item">
-                    <div class="number">30%</div>
-                    <div class="label">Sufre depresión</div>
-                    <div class="stat-desc">Las familias bolivianas pagan gran parte de su tratamiento</div>
-                </div>
-                <div class="stat-item">
-                    <div class="label">Debido a estos factores, cerca del 50% al 60% de los estudiantes de medicina desarrollan el síndrome de burnout (agotamiento académico)</div>
-                </div>
+                <div class="stat-item"><div class="label">70%–80% carecen de metodologías eficientes</div></div>
+                <div class="stat-item"><div class="label">Alto grado de aprendizaje autónomo</div></div>
+                <div class="stat-item"><div class="label">30%–50% llegan al internado con vacíos</div></div>
+                <div class="stat-item"><div class="number">30%</div><div class="label">Sufre depresión</div><div class="stat-desc">Familias bolivianas pagan gran parte del tratamiento</div></div>
+                <div class="stat-item"><div class="label">50%–60% desarrollan síndrome de burnout</div></div>
             </div>
         </div>
     </section>
@@ -148,165 +212,84 @@
             <h2 class="section-title">¿Por qué <span>estudiar Medicina</span>?</h2>
             <p class="section-subtitle">Cinco razones que te llevan a elegir este camino</p>
             <div class="features-grid">
-                <div class="feature-card">
-                    <span class="icon">❤️</span>
-                    <h3>PASIÓN</h3>
-                    <p>La medicina nace del <b>deseo de ayudar</b> y aliviar el sufrimiento humano.</p>
-                </div>
-                <div class="feature-card">
-                    <span class="icon">⚡</span>
-                    <h3>DESAFÍO</h3>
-                    <p>Cada caso clínico es <b>un reto que pone a prueba tu conocimiento</b> y creatividad.</p>
-                </div>
-                <div class="feature-card">
-                    <span class="icon">📚</span>
-                    <h3>CONOCIMIENTO</h3>
-                    <p>La medicina es un <b>camino constante de aprendizaje y crecimiento</b> intelectual.</p>
-                </div>
-                <div class="feature-card">
-                    <span class="icon">🤝</span>
-                    <h3>EMPATÍA</h3>
-                    <p><b>La capacidad de entender al otro</b> es tan importante como el conocimiento técnico.</p>
-                </div>
-                <div class="feature-card">
-                    <span class="icon">🎯</span>
-                    <h3>PROPÓSITO</h3>
-                    <p>No hay mayor satisfacción que ayudar a otros y <b>dejar una huella en el mundo</b>.</p>
-                </div>
+                <div class="feature-card"><span class="icon">❤️</span><h3>PASIÓN</h3><p>La medicina nace del <b>deseo de ayudar</b> y aliviar el sufrimiento humano.</p></div>
+                <div class="feature-card"><span class="icon">⚡</span><h3>DESAFÍO</h3><p>Cada caso clínico es <b>un reto que pone a prueba tu conocimiento</b> y creatividad.</p></div>
+                <div class="feature-card"><span class="icon">📚</span><h3>CONOCIMIENTO</h3><p>La medicina es un <b>camino constante de aprendizaje</b> y crecimiento intelectual.</p></div>
+                <div class="feature-card"><span class="icon">🤝</span><h3>EMPATÍA</h3><p><b>La capacidad de entender al otro</b> es tan importante como el conocimiento técnico.</p></div>
+                <div class="feature-card"><span class="icon">🎯</span><h3>PROPÓSITO</h3><p>No hay mayor satisfacción que ayudar a otros y <b>dejar una huella en el mundo</b>.</p></div>
             </div>
         </div>
     </section>
 
     <!-- ===== POR QUÉ MEDACADEMY ===== -->
-    <section class="section">
+    <section class="section" style="background: var(--primary-light);">
         <div class="container">
             <h2 class="section-title">¿Por qué <span>MEDACADEMY</span>?</h2>
             <p class="section-subtitle">Te preparamos para los exámenes de admisión a la mejor universidad de Cochabamba y te acompañamos en tu proceso formativo.</p>
             <div class="features-grid">
-                <div class="feature-card">
-                    <span class="icon">🎯</span>
-                    <h3>100% Enfoque personalizado</h3>
-                    <p>Diseñamos un plan de aprendizaje a tu medida. No aplicamos fórmulas genéricas: identificamos tus vacíos formativos para optimizar tu tiempo y asegurar un dominio real de la materia.</p>
-                </div>
-                <div class="feature-card">
-                    <span class="icon">🧠</span>
-                    <h3>Metodología de Vanguardia</h3>
-                    <p>Combinamos técnicas de aprendizaje activo, repaso espaciado y razonamiento clínico desde el primer día. Dejamos atrás la memorización pasiva para aplicar un método ágil centrado en la retención a largo plazo.</p>
-                </div>
-                <div class="feature-card">
-                    <span class="icon">🛠️</span>
-                    <h3>Simuladores y Prácticas</h3>
-                    <p>Pondrás a prueba tus conocimientos con simulacros reales y sesiones prácticas enfocadas en materias clave, asegurando una preparación sólida para el entorno clínico y tus evaluaciones.</p>
-                </div>
+                <div class="feature-card"><span class="icon">🎯</span><h3>100% Enfoque personalizado</h3><p>Diseñamos un plan de aprendizaje a tu medida. Identificamos tus vacíos formativos para optimizar tu tiempo.</p></div>
+                <div class="feature-card"><span class="icon">🧠</span><h3>Metodología de Vanguardia</h3><p>Combinamos técnicas de aprendizaje activo, repaso espaciado y razonamiento clínico desde el primer día.</p></div>
+                <div class="feature-card"><span class="icon">🛠️</span><h3>Simuladores y Prácticas</h3><p>Pondrás a prueba tus conocimientos con simulacros reales y sesiones prácticas enfocadas en materias clave.</p></div>
             </div>
         </div>
     </section>
 
     <!-- ===== CURSOS ===== -->
-    <section id="cursos" class="section" style="background: var(--primary-light);">
+    <section id="cursos" class="section">
         <div class="container">
             <h2 class="section-title">Nuestros <span>Cursos 2026</span></h2>
             <div class="features-grid">
-                <div class="feature-card">
-                    <span class="icon">📚</span>
-                    <h3>Admisión Medicina 2027</h3>
-                    <p>Preparación integral diseñada específicamente para los exámenes de ingreso de la facultad de medicina - UMSS.</p>
-                    <ul style="list-style: none; text-align: left; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
-                        <li><i class="fas fa-clock" style="color: var(--primary);"></i> Inicio: </li>
-                        <li><i class="fas fa-book" style="color: var(--primary);"></i> Biología molecular, médica, morfofunción, educación para la salud e investigación</li>
-                        <li><i class="fas fa-users" style="color: var(--primary);"></i> Grupos reducidos</li>
-                    </ul>
-                    <a href="#" class="btn-primary" style="margin-top: 15px; display: inline-block; padding: 10px 25px; font-size: 0.85rem;">Ver más <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="feature-card">
-                    <span class="icon">💀</span>
-                    <h3>Tutoría de Anatomía</h3>
-                    <p>Orientada al dominio práctico y teórico: comprende la ubicación, función y relaciones de cada estructura sin depender de memorización pasiva.</p>
-                    <ul style="list-style: none; text-align: left; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
-                    <li><i class="fas fa-book" style="color: var(--primary);"></i> Temario:</li>
-                    </ul>
-                    <a href="#" class="btn-primary" style="margin-top: 15px; display: inline-block; padding: 10px 25px; font-size: 0.85rem;">Ver más <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="feature-card">
-                    <span class="icon">🔬</span>
-                    <h3>Tutoría en Histología</h3>
-                    <p>Aprende a reconocer microestructuras y cortes histológicos con facilidad mediante guías visuales y análisis paso a paso.</p>
-                    <ul style="list-style: none; text-align: left; margin-top: 10px; font-size: 0.85rem; color: var(--text-secondary);">
-                        <li><i class="fas fa-book" style="color: var(--primary);"></i> Temario:</li>
-                    </ul>
-                    <a href="#" class="btn-primary" style="margin-top: 15px; display: inline-block; padding: 10px 25px; font-size: 0.85rem;">Ver más <i class="fas fa-arrow-right"></i></a>
-                </div>
+                <div class="feature-card"><span class="icon">📚</span><h3>Admisión Medicina 2027</h3><p>Preparación integral diseñada específicamente para los exámenes de ingreso de la facultad de medicina - UMSS.</p><ul style="list-style:none;text-align:left;margin-top:10px;font-size:0.85rem;color:var(--text-secondary);"><li><i class="fas fa-clock" style="color:var(--primary);"></i> Inicio: </li><li><i class="fas fa-book" style="color:var(--primary);"></i> Biología molecular, médica, morfofunción, educación para la salud e investigación</li><li><i class="fas fa-users" style="color:var(--primary);"></i> Grupos reducidos</li></ul><a href="#" class="btn-primary" style="margin-top:15px;display:inline-block;padding:10px 25px;font-size:0.85rem;">Ver más <i class="fas fa-arrow-right"></i></a></div>
+                <div class="feature-card"><span class="icon">💀</span><h3>Tutoría de Anatomía</h3><p>Orientada al dominio práctico y teórico: comprende la ubicación, función y relaciones de cada estructura.</p><ul style="list-style:none;text-align:left;margin-top:10px;font-size:0.85rem;color:var(--text-secondary);"><li><i class="fas fa-book" style="color:var(--primary);"></i> Temario: </li></ul><a href="#" class="btn-primary" style="margin-top:15px;display:inline-block;padding:10px 25px;font-size:0.85rem;">Ver más <i class="fas fa-arrow-right"></i></a></div>
+                <div class="feature-card"><span class="icon">🔬</span><h3>Tutoría en Histología</h3><p>Aprende a reconocer microestructuras y cortes histológicos con facilidad mediante guías visuales y análisis paso a paso.</p><ul style="list-style:none;text-align:left;margin-top:10px;font-size:0.85rem;color:var(--text-secondary);"><li><i class="fas fa-book" style="color:var(--primary);"></i> Temario: </li></ul><a href="#" class="btn-primary" style="margin-top:15px;display:inline-block;padding:10px 25px;font-size:0.85rem;">Ver más <i class="fas fa-arrow-right"></i></a></div>
             </div>
         </div>
     </section>
 
     <!-- ===== TESTIMONIOS ===== -->
-    <section id="testimonios" class="section">
+    <section id="testimonios" class="section" style="background: var(--primary-light);">
         <div class="container">
             <h2 class="section-title">Historias de <span>éxito boliviano</span></h2>
             <p class="section-subtitle">Conoce la experiencia de estudiantes que transformaron sus hábitos de estudio, superaron el examen de admisión y hoy avanzan en la carrera de Medicina</p>
             <div class="features-grid">
-                <div class="feature-card">
-                    <div style="color: #F6B83D; font-size: 1.2rem; margin-bottom: 10px;">★★★★★</div>
-                    <p style="font-style: italic; color: var(--text-secondary);">"Llegué al preuniversitario sintiéndome abrumado por la cantidad de contenido; sin embargo, gracias al acompañamiento personalizado y a los simulacros semanales de la academia, logré organizar mis tiempos, entender los temas difíciles y superar los exámenes de ingreso. Fue el impulso directo que necesitaba."</p>
-                    <div style="margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-                        <h4 style="color: var(--text-primary);">— Carla P.</h4>
-                        <div style="display: inline-block; background: var(--primary-gradient); color: #fff; padding: 2px 12px; border-radius: 50px; font-size: 0.7rem; margin-top: 5px;"></div>
-                    </div>  
-                </div>
-                <div class="feature-card">
-                    <div style="color: #F6B83D; font-size: 1.2rem; margin-bottom: 10px;">★★★★★</div>
-                    <p style="font-style: italic; color: var(--text-secondary);">"Anatomía e Histología me tenían estresado y busqué excusas en lugar de enfrentarlos. Cuando inicié en el instituto no solo me enseñaron a memorizar, sino a razonar con casos clínicos y entender sin frustrarme ni desgastarme emocionalmente; eso cambió por completo mi rendimiento."</p>
-                    <div style="margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-                        <h4 style="color: var(--text-primary);">— Andrés M.</h4>
-                        <div style="display: inline-block; background: var(--primary-gradient); color: #fff; padding: 2px 12px; border-radius: 50px; font-size: 0.7rem; margin-top: 5px;"> </div>
-                    </div>
-                </div>
-                <div class="feature-card">
-                    <div style="color: #F6B83D; font-size: 1.2rem; margin-bottom: 10px;">★★★★★</div>
-                    <p style="font-style: italic; color: var(--text-secondary);">"Estudiaba más de diez horas al día, pero no retenía nada y el agotamiento era terrible. Con la metodología de vanguardia de la academia aprendí técnicas activas de aprendizaje que redujeron mi tiempo de estudio a la mitad y duplicaron mis resultados. Recuperé mi tranquilidad y el control de mi carrera."</p>
-                    <div style="margin-top: 15px; border-top: 1px solid var(--border-color); padding-top: 15px;">
-                        <h4 style="color: var(--text-primary);">— Valeria R.</h4>
-                        <div style="display: inline-block; background: var(--primary-gradient); color: #fff; padding: 2px 12px; border-radius: 50px; font-size: 0.7rem; margin-top: 5px;"></div>
-                    </div>
-                </div>
+                <div class="feature-card"><div style="color:#F6B83D;font-size:1.2rem;margin-bottom:10px;">★★★★★</div><p style="font-style:italic;color:var(--text-secondary);">"Llegué al preuniversitario sintiéndome abrumado por la cantidad de contenido; sin embargo, gracias al acompañamiento personalizado y a los simulacros semanales de la academia, logré organizar mis tiempos, entender los temas difíciles y superar los exámenes de ingreso."</p><div style="margin-top:15px;border-top:1px solid var(--border-color);padding-top:15px;"><h4 style="color:var(--text-primary);">— Carla P.</h4></div></div>
+                <div class="feature-card"><div style="color:#F6B83D;font-size:1.2rem;margin-bottom:10px;">★★★★★</div><p style="font-style:italic;color:var(--text-secondary);">"Anatomía e Histología me tenían estresado y busqué excusas en lugar de enfrentarlos. Cuando inicié en el instituto no solo me enseñaron a memorizar, sino a razonar con casos clínicos y entender sin frustrarme ni desgastarme emocionalmente."</p><div style="margin-top:15px;border-top:1px solid var(--border-color);padding-top:15px;"><h4 style="color:var(--text-primary);">— Andrés M.</h4></div></div>
+                <div class="feature-card"><div style="color:#F6B83D;font-size:1.2rem;margin-bottom:10px;">★★★★★</div><p style="font-style:italic;color:var(--text-secondary);">"Estudiaba más de diez horas al día, pero no retenía nada y el agotamiento era terrible. Con la metodología de vanguardia de la academia aprendí técnicas activas de aprendizaje que redujeron mi tiempo de estudio a la mitad y duplicaron mis resultados."</p><div style="margin-top:15px;border-top:1px solid var(--border-color);padding-top:15px;"><h4 style="color:var(--text-primary);">— Valeria R.</h4></div></div>
             </div>
         </div>
     </section>
 
-    <!-- ===== FAQ ===== -->
+    <!-- ===== FAQ (separado en secciones para móvil) ===== -->
     <section id="faq" class="section">
         <div class="container">
             <h2 class="section-title">Preguntas <span>Frecuentes</span></h2>
-            <div class="features-grid" style="grid-template-columns: 1fr 1fr; gap: 20px;">
-                <div class="feature-card" style="text-align: left;">
-                    <h3><i class="fas fa-question-circle" style="color: var(--primary);"></i> ¿Cuándo inicia el curso básico de medicina de la UMSS?</h3>
-                    <p style="margin-top: 10px;">El Curso Básico de Medicina de la UMSS 2025-2026 inició su Curso de Inducción el lunes 23 de febrero de 2026. La convocatoria suele publicarse a fines de octubre, con actividades entre diciembre y febrero.</p>
+            <p class="section-subtitle">Todo lo que necesitas saber sobre el curso básico de medicina en la UMSS</p>
+
+            <!-- Grid de FAQ: en móvil se convierte en una sola columna con tarjetas independientes -->
+            <div class="faq-grid">
+                <div class="faq-card">
+                    <h3><i class="fas fa-calendar-alt"></i> ¿Cuándo inicia el curso básico de medicina de la UMSS?</h3>
+                    <p>El Curso Básico de Medicina de la UMSS 2025-2026 inició su Curso de Inducción el <strong>lunes 23 de febrero de 2026</strong>. La convocatoria suele publicarse a fines de octubre, con actividades entre diciembre y febrero.</p>
                 </div>
-                <div class="feature-card" style="text-align: left;">
-                    <h3><i class="fas fa-question-circle" style="color: var(--primary);"></i> ¿Cuántos exámenes se toman en el curso básico?</h3>
-                    <p style="margin-top: 10px;">En el Curso Básico de Medicina de la UMSS se toman tres exámenes en total: dos exámenes parciales y un examen final. Todos estos exámenes son de carácter presencial y obligatorio; la inasistencia a cualquiera de ellos implica la exclusión del curso.</p>
+                <div class="faq-card">
+                    <h3><i class="fas fa-file-alt"></i> ¿Cuántos exámenes se toman en el curso básico?</h3>
+                    <p>En el Curso Básico de Medicina de la UMSS se toman <strong>tres exámenes</strong> en total: dos exámenes parciales y un examen final. Todos son presenciales y obligatorios; la inasistencia a cualquiera implica la exclusión del curso.</p>
                 </div>
-                <div class="feature-card" style="text-align: left;">
-                    <h3><i class="fas fa-question-circle" style="color: var(--primary);"></i> ¿Cuál es el temario del curso básico?</h3>
-                    <p style="margin-top: 10px; line-height: 1.8;">
-                        <strong>El Curso Básico de Medicina de la UMSS tiene el siguiente temario basado en tres asignaturas:</strong>
-                        <br><br>
-                        <strong>Morfofunción:</strong> Incluye temas como introducción al cuerpo humano, sistemas esquelético y muscular, sistema nervioso, cardiovascular, respiratorio y digestivo.
-                        <br><br>
-                        <strong>Biología Celular y Molecular:</strong> Abarca estructura y función de proteínas, ADN, membrana celular, transporte, señalización celular, ciclo de división y genética.
-                        <br><br>
-                        <strong>Educación en Salud e Investigación:</strong> Desarrolla conceptos de salud pública y metodología de la investigación.
+                <div class="faq-card">
+                    <h3><i class="fas fa-book-open"></i> ¿Cuál es el temario del curso básico?</h3>
+                    <p>
+                        <strong>El Curso Básico de Medicina de la UMSS tiene el siguiente temario basado en tres asignaturas:</strong><br><br>
+                        <strong>Morfofunción:</strong> introducción al cuerpo humano, sistemas esquelético y muscular, sistema nervioso, cardiovascular, respiratorio y digestivo.<br><br>
+                        <strong>Biología Celular y Molecular:</strong> estructura y función de proteínas, ADN, membrana celular, transporte, señalización celular, ciclo de división y genética.<br><br>
+                        <strong>Educación en Salud e Investigación:</strong> conceptos de salud pública y metodología de la investigación.
                     </p>
                 </div>
-                <div class="feature-card" style="text-align: left;">
-                    <h3><i class="fas fa-question-circle" style="color: var(--primary);"></i> ¿Incluye prácticas el curso básico?</h3>
-                    <p style="margin-top: 10px; line-height: 1.8;">
-                        <strong>Sí, el Curso Básico de Medicina de la UMSS incluye prácticas.</strong>
-                        <br><br>
-                        <strong>Primera fase (formativa):</strong> Es virtual para las materias de Morfofunción y Biología Celular, e incluye exámenes presenciales obligatorios.
-                        <br><br>
-                        <strong>Segunda fase (inducción):</strong> Es completamente presencial y obligatoria para los aprobados, donde se realizan actividades prácticas de inducción a la formación médica.
+                <div class="faq-card">
+                    <h3><i class="fas fa-flask"></i> ¿Incluye prácticas el curso básico?</h3>
+                    <p>
+                        <strong>Sí, el Curso Básico de Medicina de la UMSS incluye prácticas.</strong><br><br>
+                        <strong>Primera fase (formativa):</strong> virtual para Morfofunción y Biología Celular, con exámenes presenciales obligatorios.<br><br>
+                        <strong>Segunda fase (inducción):</strong> completamente presencial y obligatoria para los aprobados, donde se realizan actividades prácticas de inducción a la formación médica.
                     </p>
                 </div>
             </div>
@@ -319,19 +302,18 @@
             <h2>¿Listo para <span>dar un gran paso para tu futuro</span>?</h2>
             <p>Tú decides. Prepárate con nosotros y sé parte de la generación que estudia inteligente.</p>
             <a href="register.html" class="btn-large"><i class="fas fa-graduation-cap"></i> Inscríbete ahora</a>
-            
-            <h3><i class="fas fa-question-circle" style="color: var(--primary);"></i> Cupos limitados por grupo. Asegura tu cupo.</h3>
+            <h3 style="margin-top:20px;font-weight:400;font-size:1.1rem;"> Cupos limitados por grupo. Asegura tu cupo.</h3>
         </div>
     </section>
 
     <!-- ===== FOOTER ===== -->
     <footer class="footer">
         <div class="container">
-            <div class="logo" style="justify-content: center; margin-bottom: 10px;">
+            <div class="logo" style="justify-content:center;margin-bottom:10px;">
                 <img src="img/logo.png" alt="MEDACADEMY" class="logo-img" />
                 <span class="logo-text">MED<span>ACADEMY</span></span>
             </div>
-            <p style="margin-bottom: 15px;">Formamos a los médicos que Bolivia necesita.</p>
+            <p style="margin-bottom:15px;">Formamos a los médicos que Bolivia necesita.</p>
             <div class="social-links">
                 <a href="#"><i class="fab fa-linkedin"></i></a>
                 <a href="#"><i class="fab fa-twitter"></i></a>
@@ -339,19 +321,19 @@
                 <a href="#"><i class="fab fa-youtube"></i></a>
                 <a href="#"><i class="fab fa-instagram"></i></a>
             </div>
-            <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 15px 0; font-size: 0.85rem;">
-                <span><i class="fas fa-phone" style="color: var(--primary);"></i> +591 67503742</span>
-                <span><i class="fas fa-envelope" style="color: var(--primary);"></i> medacademy</span>
-                <span><i class="fas fa-map-marker-alt" style="color: var(--primary);"></i> una cuadra antes de la virgen</span>
+            <div style="display:flex;justify-content:center;gap:20px;flex-wrap:wrap;margin:15px 0;font-size:0.85rem;">
+                <span><i class="fas fa-phone" style="color:var(--primary);"></i> +591 67503742</span>
+                <span><i class="fas fa-envelope" style="color:var(--primary);"></i> medacademy</span>
+                <span><i class="fas fa-map-marker-alt" style="color:var(--primary);"></i> una cuadra antes de la virgen</span>
             </div>
-            <p style="margin-top: 15px; font-size: 0.75rem;">&copy; 2026 MEDACADEMY Bolivia. Todos los derechos reservados.</p>
+            <p style="margin-top:15px;font-size:0.75rem;">&copy; 2026 MEDACADEMY Bolivia. Todos los derechos reservados.</p>
         </div>
     </footer>
 
     <!-- ===== SCRIPTS ===== -->
     <script>
-        // ===== CARRUSEL =====
         document.addEventListener('DOMContentLoaded', function() {
+            // Carrusel
             const slides = document.querySelectorAll('.carousel-slide');
             const indicators = document.querySelectorAll('.indicator');
             const prevBtn = document.querySelector('.prev-btn');
@@ -360,110 +342,35 @@
             let slideInterval;
 
             function goToSlide(index) {
-                slides.forEach((slide, i) => {
-                    slide.classList.toggle('active', i === index);
-                });
-                indicators.forEach((indicator, i) => {
-                    indicator.classList.toggle('active', i === index);
-                });
+                slides.forEach((slide, i) => slide.classList.toggle('active', i === index));
+                indicators.forEach((ind, i) => ind.classList.toggle('active', i === index));
                 currentSlide = index;
             }
+            function nextSlide() { goToSlide((currentSlide + 1) % slides.length); }
+            function prevSlide() { goToSlide((currentSlide - 1 + slides.length) % slides.length); }
+            function startAutoSlide() { slideInterval = setInterval(nextSlide, 5000); }
+            function resetAutoSlide() { clearInterval(slideInterval); startAutoSlide(); }
 
-            function nextSlide() {
-                goToSlide((currentSlide + 1) % slides.length);
-            }
-
-            function prevSlide() {
-                goToSlide((currentSlide - 1 + slides.length) % slides.length);
-            }
-
-            function startAutoSlide() {
-                slideInterval = setInterval(nextSlide, 5000);
-            }
-
-            function resetAutoSlide() {
-                clearInterval(slideInterval);
-                startAutoSlide();
-            }
-
-            if (nextBtn) {
-                nextBtn.addEventListener('click', () => {
-                    nextSlide();
-                    resetAutoSlide();
-                });
-            }
-
-            if (prevBtn) {
-                prevBtn.addEventListener('click', () => {
-                    prevSlide();
-                    resetAutoSlide();
-                });
-            }
-
-            indicators.forEach((indicator, index) => {
-                indicator.addEventListener('click', () => {
-                    goToSlide(index);
-                    resetAutoSlide();
-                });
+            if (nextBtn) { nextBtn.addEventListener('click', () => { nextSlide(); resetAutoSlide(); }); }
+            if (prevBtn) { prevBtn.addEventListener('click', () => { prevSlide(); resetAutoSlide(); }); }
+            indicators.forEach((ind, i) => {
+                ind.addEventListener('click', () => { goToSlide(i); resetAutoSlide(); });
             });
 
-            // Touch support
-            let touchStartX = 0;
-            let touchEndX = 0;
+            let touchStartX = 0, touchEndX = 0;
             const carousel = document.querySelector('.carousel-container');
-
             if (carousel) {
-                carousel.addEventListener('touchstart', (e) => {
-                    touchStartX = e.changedTouches[0].screenX;
-                }, { passive: true });
-
+                carousel.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
                 carousel.addEventListener('touchend', (e) => {
                     touchEndX = e.changedTouches[0].screenX;
                     const diff = touchStartX - touchEndX;
                     if (Math.abs(diff) > 50) {
-                        if (diff > 0) {
-                            nextSlide();
-                        } else {
-                            prevSlide();
-                        }
+                        if (diff > 0) { nextSlide(); } else { prevSlide(); }
                         resetAutoSlide();
                     }
                 }, { passive: true });
             }
-
             startAutoSlide();
-        });
-
-        // ===== THEME TOGGLE =====
-        document.addEventListener('DOMContentLoaded', function() {
-            const themeToggle = document.getElementById('themeToggle');
-            const themeIcon = document.getElementById('themeIcon');
-            const html = document.documentElement;
-            
-            if (!themeToggle || !themeIcon) return;
-            
-            const savedTheme = localStorage.getItem('theme');
-            if (savedTheme === 'dark') {
-                html.setAttribute('data-theme', 'dark');
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            }
-
-            themeToggle.addEventListener('click', function() {
-                const isDark = html.getAttribute('data-theme') === 'dark';
-                
-                if (isDark) {
-                    html.removeAttribute('data-theme');
-                    localStorage.setItem('theme', 'light');
-                    themeIcon.classList.remove('fa-sun');
-                    themeIcon.classList.add('fa-moon');
-                } else {
-                    html.setAttribute('data-theme', 'dark');
-                    localStorage.setItem('theme', 'dark');
-                    themeIcon.classList.remove('fa-moon');
-                    themeIcon.classList.add('fa-sun');
-                }
-            });
         });
     </script>
 </body>
